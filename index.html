@@ -26,6 +26,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
+  margin:0;
   background:var(--bg); color:var(--text);
   font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
   font-size:16.5px; line-height:1.75;
@@ -48,16 +49,20 @@ body{
 .pad{padding-top:96px;padding-bottom:96px}
 
 /* topbar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:70;background:transparent;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);animation:topbarFloat 6s ease-in-out infinite}
 .topbar .cell{display:flex;align-items:center;justify-content:space-between;height:60px;font-size:14px;color:var(--muted)}
+body{padding-top:60px}
+@keyframes topbarFloat{0%,100%{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}50%{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}}
 .tb-clock{display:flex;align-items:center;gap:10px;white-space:nowrap}
 .tb-clock .sep{opacity:.35;margin:0 2px}
 .tb-clock svg{flex-shrink:0}
-#clock{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;line-height:1.35}
+#clock{color:var(--text);font-weight:600;font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:.02em;display:inline-flex;align-items:center;line-height:1.35}
 .tb-icons{display:flex;align-items:center;gap:8px}
 .tb-icons button{background:none;border:none;color:var(--text);width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;opacity:.9}
 .tb-icons button:hover{opacity:1}
-.kbtn{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-radius:7px;padding:4px 8px;color:var(--muted);background:none;cursor:pointer}
+.kbtn{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;color:var(--muted);background:none;cursor:pointer}
 .kbtn:hover{color:var(--text);border-color:var(--muted)}
+.kbtn svg{flex-shrink:0;opacity:.85}
 .sd{display:inline-block;height:1.35em;line-height:1.35em;overflow:hidden}
 .sd>span{display:block;transition:transform .45s cubic-bezier(.35,1.3,.4,1)}
 .sd>span>i{display:block;font-style:normal;height:1.35em}
@@ -68,7 +73,7 @@ body{
 
 /* hero */
 .hero{position:relative}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(480px 300px at 18% 4%,rgba(125,255,207,.06),transparent 70%);pointer-events:none}
+.hero::before{content:'';position:absolute;top:-60px;left:0;right:0;bottom:0;background:radial-gradient(480px 300px at 18% 4%,rgba(125,255,207,.06),transparent 70%);pointer-events:none}
 .avatar{width:120px;height:120px;object-fit:cover;border:2px solid #fff;display:block;background:#1c1c1c}
 h1.name{font-size:40px;color:var(--text);margin:26px 0 4px;letter-spacing:.5px}
 .role{color:var(--muted);font-size:17px}
@@ -201,8 +206,8 @@ section b,section strong{color:var(--text);font-weight:600}
       <span id="dateline"></span>
     </div>
     <div class="tb-icons">
-      <button class="kbtn" id="kOpen">⌘K</button>
-      <button id="muteBtn" title="Sound">
+      <button class="kbtn" id="kOpen"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>⌘K</button>
+      <button id="muteBtn" title="Sound" style="display:none">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
       </button>
       <button id="themeBtn" title="Theme">
