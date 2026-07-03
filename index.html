@@ -192,6 +192,48 @@ section b,section strong{color:var(--text);font-weight:600}
   *{transition:none!important;animation:none!important}
 }
 </style>
+<style>
+/* ================= CMS Edit Mode ================= */
+#cmsPanel{position:fixed;top:0;right:0;bottom:0;width:min(410px,94vw);z-index:95;background:rgba(10,10,10,.93);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-left:1px solid var(--line);transform:translateX(105%);transition:transform .5s cubic-bezier(.3,1,.4,1);display:flex;flex-direction:column;font-size:13.5px;color:var(--text)}
+#cmsPanel.open{transform:none}
+.cms-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+.cms-badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--dockline);border-radius:10px;padding:3px 10px;color:#7dffcf}
+.cms-head button{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer}
+.cms-head button:hover{color:var(--text)}
+.cms-body{flex:1;overflow-y:auto;padding:6px 18px 18px}
+.cms-sec{border-bottom:1px solid var(--line)}
+.cms-sec>button{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;color:var(--text);font:inherit;font-weight:600;padding:13px 2px;cursor:pointer}
+.cms-sec>button span.ar{color:var(--muted);transition:transform .3s}
+.cms-sec.open>button span.ar{transform:rotate(90deg)}
+.cms-sec>.cms-fields{display:none;padding:2px 2px 16px}
+.cms-sec.open>.cms-fields{display:block}
+.cms-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:12px 0 5px}
+.cms-body input[type=text],.cms-body input[type=password],.cms-body textarea,.cms-body select{width:100%;box-sizing:border-box;background:rgba(255,255,255,.045);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;outline:none}
+.cms-body textarea{min-height:74px;resize:vertical;line-height:1.5}
+.cms-body input:focus,.cms-body textarea:focus,.cms-body select:focus{border-color:var(--muted)}
+.cms-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px 14px;margin:10px 0;position:relative}
+.cms-item .cms-del{position:absolute;top:8px;right:8px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:7px;font-size:11px;padding:2px 8px;cursor:pointer}
+.cms-item .cms-del:hover{color:#ff7d9c;border-color:#ff7d9c}
+.cms-add{width:100%;background:none;border:1px dashed var(--dockline);color:var(--muted);border-radius:9px;padding:8px;font:inherit;font-size:12.5px;cursor:pointer;margin-top:8px}
+.cms-add:hover{color:var(--text);border-color:var(--muted)}
+.cms-row{display:flex;gap:8px}
+.cms-row>*{flex:1}
+.cms-drop{border:1.5px dashed var(--dockline);border-radius:10px;padding:10px;text-align:center;color:var(--muted);font-size:12px;cursor:pointer;margin-top:6px;transition:border-color .2s}
+.cms-drop.over{border-color:#7dffcf;color:#7dffcf}
+.cms-prev{width:100%;height:90px;border-radius:8px;background-size:cover;background-position:center;border:1px solid var(--line);margin-bottom:6px}
+.cms-foot{display:flex;align-items:center;gap:8px;padding:14px 18px;border-top:1px solid var(--line)}
+.cms-foot #cmsStatus{flex:1;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.cms-foot button{background:none;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:7px 14px;font:inherit;font-size:12.5px;cursor:pointer}
+.cms-foot button:hover{border-color:var(--muted)}
+.cms-foot button.pri{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:600}
+#cmsLogin{position:fixed;inset:0;z-index:96;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center}
+#cmsLogin.show{display:flex}
+.cms-login{width:min(330px,90vw);background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:24px}
+.cms-login h3{margin:0 0 14px;font-size:16px}
+.cms-login .err{color:#ff7d9c;font-size:12px;min-height:16px;margin:8px 0}
+.cms-login button{width:100%;background:var(--text);color:var(--bg);border:none;border-radius:9px;padding:9px;font:inherit;font-weight:600;cursor:pointer}
+.cms-login input{width:100%;box-sizing:border-box;background:rgba(255,255,255,.045);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px 11px;font:inherit;outline:none}
+</style>
 </head>
 <body>
 
@@ -221,19 +263,19 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band hero" id="home">
   <div class="cell pad">
-    <img class="avatar" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIj48cmVjdCB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzFjMWMxYyIvPjxjaXJjbGUgY3g9IjYwIiBjeT0iNDYiIHI9IjIwIiBmaWxsPSIjM2EzYTNhIi8+PHBhdGggZD0iTTIyIDExMmMwLTIyIDE3LTM0IDM4LTM0czM4IDEyIDM4IDM0IiBmaWxsPSIjM2EzYTNhIi8+PC9zdmc+" alt="Anesh">
+    <img class="avatar" id="pfpImg" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIj48cmVjdCB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzFjMWMxYyIvPjxjaXJjbGUgY3g9IjYwIiBjeT0iNDYiIHI9IjIwIiBmaWxsPSIjM2EzYTNhIi8+PHBhdGggZD0iTTIyIDExMmMwLTIyIDE3LTM0IDM4LTM0czM4IDEyIDM4IDM0IiBmaWxsPSIjM2EzYTNhIi8+PC9zdmc+" alt="Anesh">
     <h1 class="name bl" id="heroName">anesh</h1>
     <div class="role">I'm a <span class="loopw" id="loop"></span></div>
-    <div class="pill"><span class="gd"></span><span class="shim">Open to work — freelance &amp; collabs</span></div>
+    <div class="pill"><span class="gd"></span><span class="shim" id="pillTxt">Open to work — freelance &amp; collabs</span></div>
 
     <section>
-      <h2>Me in 10 seconds</h2>
-      <p>Hi! I'm Anesh, a graphic designer and vibe coder based in <b>Jakarta, Indonesia</b>. I design visuals, build NFT collections, and ship Web3 products end to end — from artwork to smart contract to the site people mint on.</p>
+      <h2 id="me10h">Me in 10 seconds</h2>
+      <p id="me10p">Hi! I'm Anesh, a graphic designer and vibe coder based in <b>Jakarta, Indonesia</b>. I design visuals, build NFT collections, and ship Web3 products end to end — from artwork to smart contract to the site people mint on.</p>
     </section>
 
     <section>
-      <h2>What's your background?</h2>
-      <p>I work full-time in a Culture &amp; Live team by day, and run my own design and Web3 practice on the side. Over the past few years that's grown into launching NFT collections, building launchpads, and coding full product sites myself — design and dev in one person.</p>
+      <h2 id="bgh">What's your background?</h2>
+      <p id="bgp">I work full-time in a Culture &amp; Live team by day, and run my own design and Web3 practice on the side. Over the past few years that's grown into launching NFT collections, building launchpads, and coding full product sites myself — design and dev in one person.</p>
     </section>
   </div>
 </div>
@@ -244,9 +286,9 @@ section b,section strong{color:var(--text);font-weight:600}
   <div class="cell pad">
     <section>
       <h2>Career</h2>
-      <p>Currently, I run my own independent design and Web3 practice, partnering with collectors, founders, and communities across NFT, art, and creative tech. Most of my work focuses on turning raw ideas into finished products — identity, artwork, site, and contract, all shipped by one person.</p>
-      <p>Over the past few years, I've launched collections like <b>Punkers V2</b>, <b>Manthy</b>, and the original <b>Punkers</b>, built products like <b>Underdrip</b>, <b>YourSpace</b>, and <b>Odds Launchpad</b>, and run live art events like <b>SipandDrip</b> and <b>Mural24Jam</b>.</p>
-      <p>Today, I bring all of that together through visual design, NFT art direction, and AI-assisted coding — mostly for Web3 communities and creative products.</p>
+      <p id="careerP1">Currently, I run my own independent design and Web3 practice, partnering with collectors, founders, and communities across NFT, art, and creative tech. Most of my work focuses on turning raw ideas into finished products — identity, artwork, site, and contract, all shipped by one person.</p>
+      <p id="careerP2">Over the past few years, I've launched collections like <b>Punkers V2</b>, <b>Manthy</b>, and the original <b>Punkers</b>, built products like <b>Underdrip</b>, <b>YourSpace</b>, and <b>Odds Launchpad</b>, and run live art events like <b>SipandDrip</b> and <b>Mural24Jam</b>.</p>
+      <p id="careerP3">Today, I bring all of that together through visual design, NFT art direction, and AI-assisted coding — mostly for Web3 communities and creative products.</p>
       <a class="link" href="#">Read full resume
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="18" x2="18" y2="6"/><polyline points="8 6 18 6 18 16"/></svg>
       </a>
@@ -261,9 +303,11 @@ section b,section strong{color:var(--text);font-weight:600}
     <section>
       <div class="eyebrow">Writing</div>
       <h2>Articles</h2>
+      <div id="articlesList">
       <a class="arow" href="#"><span class="at">Designing 999 traits without losing the vibe</span><span class="ad">2026 · 6 min</span></a>
       <a class="arow" href="#"><span class="at">Free mint economics: what Punkers V2 taught me</span><span class="ad">2025 · 8 min</span></a>
       <a class="arow" href="#"><span class="at">One-person pipeline: from Figma to mainnet</span><span class="ad">2025 · 5 min</span></a>
+      </div>
     </section>
   </div>
 </div>
@@ -275,7 +319,7 @@ section b,section strong{color:var(--text);font-weight:600}
     <section>
       <div class="eyebrow">Visual</div>
       <h2>Digital Works</h2>
-      <p>Selected artwork, identity, and visual systems.</p>
+      <p id="secDigitalP">Selected artwork, identity, and visual systems.</p>
       <div class="grid" id="g-digital"></div>
     </section>
   </div>
@@ -288,7 +332,7 @@ section b,section strong{color:var(--text);font-weight:600}
     <section>
       <div class="eyebrow">On-chain</div>
       <h2>NFT Collections</h2>
-      <p>Collections I've designed, coded, and launched.</p>
+      <p id="secNftP">Collections I've designed, coded, and launched.</p>
       <div class="grid" id="g-nft"></div>
     </section>
   </div>
@@ -301,7 +345,7 @@ section b,section strong{color:var(--text);font-weight:600}
     <section>
       <div class="eyebrow">Shipped with AI</div>
       <h2>Vibe Code</h2>
-      <p>Products I designed and coded end to end.</p>
+      <p id="secCodeP">Products I designed and coded end to end.</p>
       <div class="grid" id="g-code"></div>
     </section>
   </div>
@@ -314,7 +358,7 @@ section b,section strong{color:var(--text);font-weight:600}
     <section>
       <div class="eyebrow">Offline</div>
       <h2>Events</h2>
-      <div class="tl">
+      <div class="tl" id="eventsList">
         <div class="tli now"><div class="tly">2026 — NOW</div><div class="tlt">Mural24Jam</div><div class="tld">A 24-hour live mural streaming concept — one wall, one day, broadcast end to end.</div></div>
         <div class="tli"><div class="tly">2025</div><div class="tlt">SipandDrip</div><div class="tld">Live art &amp; mural streaming event blending coffee, paint, and community.</div></div>
         <div class="tli"><div class="tly">2019 — 2021</div><div class="tlt">Campus events</div><div class="tld">Ran creative events during university — stage visuals, posters, and the chaos of making things happen live.</div></div>
@@ -329,13 +373,13 @@ section b,section strong{color:var(--text);font-weight:600}
   <div class="cell pad">
     <section>
       <h2 class="bl">Interactions</h2>
-      <p>A collection of micro-interactions, motion experiments, and UI details I've been exploring. Small ideas, prototypes, and interaction patterns that help me learn, test, and refine how interfaces feel.</p>
+      <p id="interP">A collection of micro-interactions, motion experiments, and UI details I've been exploring. Small ideas, prototypes, and interaction patterns that help me learn, test, and refine how interfaces feel.</p>
       <div class="demo-card">
         <button class="switch" id="demoSwitch" aria-label="Toggle switch demo"><span class="knob"></span></button>
       </div>
       <div class="demo-cap">
-        <b>Switch</b>
-        <p>A simple toggle interaction with subtle motion, sound, and spring physics.</p>
+        <b id="interCapT">Switch</b>
+        <p id="interCapP">A simple toggle interaction with subtle motion, sound, and spring physics.</p>
       </div>
     </section>
   </div>
@@ -390,7 +434,7 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hoverable = matchMedia('(hover: hover)').matches;
 
 /* ---- data ---- */
-const WORKS = [
+let WORKS = [
   {id:'brand', cat:'Digital', t:'Brand & Visual Systems', m:'IDENTITY · SOCIAL KITS', g:'linear-gradient(150deg,#233047,#7dffcf22,#141a26)', d:'Identity design, social kits, and launch visuals for Web3 brands and communities.'},
   {id:'uidrip', cat:'Digital', t:'UI Design — Underdrip', m:'FIGMA → BUILD', g:'linear-gradient(200deg,#2b2140,#9c7dff22,#171226)', d:'Full UI design for the Underdrip holder hub — designed in Figma, then built by me.'},
   {id:'poster', cat:'Digital', t:'Event Posters', m:'PRINT · SOCIAL', g:'linear-gradient(130deg,#40232c,#ff7d9c22,#241318)', d:'Poster and stage visual series for live art events.'},
@@ -404,10 +448,13 @@ const WORKS = [
 ];
 
 /* ---- render cards ---- */
+function thumbBg(w){
+  return w.img ? `background:url('${w.img}') center/cover no-repeat` : `background:${w.g}`;
+}
 function card(w){
   const el = document.createElement('div');
   el.className = 'card tilt';
-  el.innerHTML = `<div class="thumb" style="background:${w.g}"></div>
+  el.innerHTML = `<div class="thumb" style="${thumbBg(w)}"></div>
     <div class="ct"><span>${w.t}</span>${w.chip ? `<span class="chip">${w.chip}</span>` : ''}</div>
     <div class="cm">${w.m}</div>
     ${w.stats ? `<div class="stats">${w.stats.map(s=>`<div class="st"><b class="num" data-n="${s.n}">0</b><i>${s.l}</i></div>`).join('')}</div>` : ''}`;
@@ -415,10 +462,19 @@ function card(w){
   return el;
 }
 const g = c => document.getElementById(c);
-WORKS.forEach(w=>{
-  const target = w.cat === 'Digital' ? 'g-digital' : w.cat === 'NFT' ? 'g-nft' : 'g-code';
-  g(target).appendChild(card(w));
-});
+function renderWorks(immediate){
+  ['g-digital','g-nft','g-code'].forEach(id=>{ g(id).innerHTML=''; });
+  WORKS.forEach(w=>{
+    const target = w.cat === 'Digital' ? 'g-digital' : w.cat === 'NFT' ? 'g-nft' : 'g-code';
+    g(target).appendChild(card(w));
+  });
+  if (immediate){
+    document.querySelectorAll('.num').forEach(el=>{ el.textContent = (+el.dataset.n).toLocaleString('en-US'); });
+  }
+  if (window.__cmdkReady) buildItems();
+  if (typeof bindTilt === 'function') bindTilt();
+}
+renderWorks();
 
 /* ---- sliding clock ---- */
 const clockEl = g('clock');
@@ -461,12 +517,17 @@ const hio = new IntersectionObserver(es=>es.forEach(e=>{
 document.querySelectorAll('section h2').forEach(h=>{ split(h); hio.observe(h); });
 
 /* ---- text loop role ---- */
-const ROLES = ['Graphic Designer','NFT Artist','Vibe Coder','Event Runner'];
+let ROLES = ['Graphic Designer','NFT Artist','Vibe Coder','Event Runner'];
 const loop = g('loop');
-ROLES.forEach((r,i)=>{ const b = document.createElement('b'); b.textContent = r; if(!i) b.className='cur'; loop.appendChild(b); });
 let li = 0;
+function renderRoles(){
+  loop.innerHTML = ''; li = 0;
+  ROLES.forEach((r,i)=>{ const b = document.createElement('b'); b.textContent = r; if(!i) b.className='cur'; loop.appendChild(b); });
+}
+renderRoles();
 setInterval(()=>{
   const ws = loop.children;
+  if (ws.length < 2) return;
   ws[li].className = 'out';
   li = (li+1) % ws.length;
   ws[li].className = 'cur';
@@ -487,8 +548,11 @@ const nio = new IntersectionObserver(es=>es.forEach(e=>{
 document.querySelectorAll('.num').forEach(el=>nio.observe(el));
 
 /* ---- tilt ---- */
-if (hoverable && !reduced){
+function bindTilt(){
+  if (!hoverable || reduced) return;
   document.querySelectorAll('.tilt').forEach(c=>{
+    if (c.dataset.tiltBound) return;
+    c.dataset.tiltBound = '1';
     c.addEventListener('mousemove',e=>{
       const r = c.getBoundingClientRect();
       const x = (e.clientX-r.left)/r.width-.5, y = (e.clientY-r.top)/r.height-.5;
@@ -496,6 +560,9 @@ if (hoverable && !reduced){
     });
     c.addEventListener('mouseleave',()=>c.style.transform='');
   });
+}
+bindTilt();
+if (hoverable && !reduced){
   /* magnetic */
   document.querySelectorAll('.mag').forEach(el=>{
     el.addEventListener('mousemove',e=>{
@@ -508,13 +575,20 @@ if (hoverable && !reduced){
 
 /* ---- morphing dialog / drawer ---- */
 const ovl = g('ovl'), sheet = g('sheet');
+function marketLink(w){
+  if (!w.ca) return null;
+  return w.chain === 'STARS'
+    ? { u: `https://www.stargaze.zone/m/${w.ca}/tokens`, l: 'View on Stargaze' }
+    : { u: `https://opensea.io/assets/ethereum/${w.ca}`, l: 'View on OpenSea' };
+}
 function openWork(w, fromEl){
+  const mkt = marketLink(w);
   sheet.innerHTML = `<div class="grab"></div>
-    <div class="sthumb thumb" style="background:${w.g}"></div>
+    <div class="sthumb thumb" style="${thumbBg(w)}"></div>
     <h3>${w.t}</h3><div class="cm">${w.m}</div>
     <p>${w.d}</p>
     ${w.stats ? `<div class="stats">${w.stats.map(s=>`<div class="st"><b>${s.n.toLocaleString('en-US')}</b><i>${s.l}</i></div>`).join('')}</div>` : ''}
-    <div class="act">${w.link ? `<a href="${w.link}" target="_blank" rel="noopener">Visit project</a>` : ''}<button onclick="closeOvl()">Close</button></div>`;
+    <div class="act">${mkt ? `<a href="${mkt.u}" target="_blank" rel="noopener">${mkt.l}</a>` : ''}${w.link ? `<a href="${w.link}" target="_blank" rel="noopener">Visit project</a>` : ''}<button onclick="closeOvl()">Close</button></div>`;
   ovl.classList.add('show');
   if (reduced) return;
   sheet.style.transition = 'none';
@@ -534,15 +608,22 @@ ovl.addEventListener('click', e=>{ if (e.target === ovl) closeOvl(); });
 
 /* ---- command palette ---- */
 const cmdk = g('cmdk'), cin = g('cin'), clist = g('clist');
-const ITEMS = [
-  ...WORKS.map(w=>({t:w.t, c:w.cat, run:()=>{ closeOvl(); openWork(w, document.body); }})),
-  {t:'Go to Home', c:'Nav', run:()=>{ closeOvl(); location.hash='#home'; }},
-  {t:'Go to Work', c:'Nav', run:()=>{ closeOvl(); location.hash='#work'; }},
-  {t:'Go to Interactions', c:'Nav', run:()=>{ closeOvl(); location.hash='#interactions'; }},
-  {t:'Work with me — email', c:'Contact', run:()=>location.href='mailto:artnesh06@gmail.com'},
-  {t:'X / Twitter — @artnesh', c:'Contact', run:()=>open('https://x.com/artnesh')}
-];
-let filtered = ITEMS;
+let ITEMS = [];
+function buildItems(){
+  ITEMS = [
+    ...WORKS.map(w=>({t:w.t, c:w.cat, run:()=>{ closeOvl(); openWork(w, document.body); }})),
+    {t:'Go to Home', c:'Nav', run:()=>{ closeOvl(); location.hash='#home'; }},
+    {t:'Go to Work', c:'Nav', run:()=>{ closeOvl(); location.hash='#work'; }},
+    {t:'Go to Interactions', c:'Nav', run:()=>{ closeOvl(); location.hash='#interactions'; }},
+    {t:'Work with me — email', c:'Contact', run:()=>location.href='mailto:artnesh06@gmail.com'},
+    {t:'X / Twitter — @artnesh', c:'Contact', run:()=>open('https://x.com/artnesh')},
+    {t:'Edit Mode', c:'Owner', run:()=>{ closeOvl(); CMS.open(); }}
+  ];
+  filtered = ITEMS;
+}
+let filtered = [];
+buildItems();
+window.__cmdkReady = true;
 function renderList(q){
   filtered = ITEMS.filter(i=>i.t.toLowerCase().includes(q.toLowerCase()));
   clist.innerHTML = filtered.map((i,x)=>`<div class="ci${x?'':' sel'}" data-x="${x}"><span>${i.t}</span><span class="cc">${i.c}</span></div>`).join('') || '<div class="ci"><span style="color:var(--muted)">No results</span></div>';
@@ -590,6 +671,348 @@ g('demoSwitch').addEventListener('click', function(){
   this.classList.toggle('on');
   clickSnd(this.classList.contains('on') ? 880 : 520);
 });
+
+/* ================= CMS / Edit Mode ================= */
+const CMS = (() => {
+  const API = 'https://api-portfolio.artnesh.cloud';
+  let token = localStorage.getItem('cms_token') || '';
+  let saved = {};   // content dari server
+  let draft = {};   // perubahan yang belum di-save
+  const norm = s => (s || '').replace(/ /g, ' ');
+
+  /* ---- baca konten default dari DOM (fallback) ---- */
+  function readArticlesDom(){
+    return [...g('articlesList').querySelectorAll('.arow')].map(a => ({
+      t: a.querySelector('.at').textContent,
+      meta: a.querySelector('.ad').textContent,
+      href: a.getAttribute('href') || '#'
+    }));
+  }
+  function readEventsDom(){
+    return [...g('eventsList').querySelectorAll('.tli')].map(el => ({
+      y: el.querySelector('.tly').textContent,
+      t: el.querySelector('.tlt').textContent,
+      d: el.querySelector('.tld').textContent,
+      now: el.classList.contains('now')
+    }));
+  }
+  const DEF = {
+    'pfp': g('pfpImg').src,
+    'hero.name': norm(g('heroName').textContent),
+    'roles': JSON.stringify(ROLES),
+    'hero.pill': g('pillTxt').textContent,
+    'me10h': norm(g('me10h').textContent), 'me10p': g('me10p').innerHTML,
+    'bgh': norm(g('bgh').textContent), 'bgp': g('bgp').innerHTML,
+    'careerP1': g('careerP1').innerHTML, 'careerP2': g('careerP2').innerHTML, 'careerP3': g('careerP3').innerHTML,
+    'articles': JSON.stringify(readArticlesDom()),
+    'secDigitalP': g('secDigitalP').innerHTML, 'secNftP': g('secNftP').innerHTML, 'secCodeP': g('secCodeP').innerHTML,
+    'works': JSON.stringify(WORKS),
+    'events': JSON.stringify(readEventsDom()),
+    'interP': g('interP').innerHTML,
+    'interCapT': g('interCapT').textContent, 'interCapP': g('interCapP').textContent
+  };
+
+  /* ---- apply konten ke halaman ---- */
+  function renderArticles(arr){
+    g('articlesList').innerHTML = arr.map(a =>
+      `<a class="arow" href="${a.href || '#'}"><span class="at">${a.t}</span><span class="ad">${a.meta || ''}</span></a>`
+    ).join('');
+  }
+  function renderEvents(arr){
+    g('eventsList').innerHTML = arr.map(ev =>
+      `<div class="tli${ev.now ? ' now' : ''}"><div class="tly">${ev.y}</div><div class="tlt">${ev.t}</div><div class="tld">${ev.d}</div></div>`
+    ).join('');
+  }
+  function applyKey(k, v){
+    try{
+      switch(k){
+        case 'pfp': g('pfpImg').src = v; break;
+        case 'hero.name': { const el = g('heroName'); el.textContent = v; split(el); el.classList.add('in'); break; }
+        case 'roles': ROLES = JSON.parse(v); renderRoles(); break;
+        case 'hero.pill': g('pillTxt').textContent = v; break;
+        case 'me10h': case 'bgh': { const el = g(k); el.textContent = v; split(el); el.classList.add('in'); break; }
+        case 'me10p': case 'bgp': case 'careerP1': case 'careerP2': case 'careerP3':
+        case 'secDigitalP': case 'secNftP': case 'secCodeP': case 'interP':
+          g(k).innerHTML = v; break;
+        case 'interCapT': case 'interCapP': g(k).textContent = v; break;
+        case 'articles': renderArticles(JSON.parse(v)); break;
+        case 'events': renderEvents(JSON.parse(v)); break;
+        case 'works': WORKS = JSON.parse(v); renderWorks(true); break;
+      }
+    }catch(e){ console.warn('CMS apply fail', k, e); }
+  }
+  const cur = k => (k in draft) ? draft[k] : (k in saved) ? saved[k] : DEF[k];
+  function set(k, v){ draft[k] = v; applyKey(k, v); status('Unsaved changes'); }
+
+  /* ---- load konten dari API (public) ---- */
+  fetch(API + '/content').then(r => r.ok ? r.json() : {}).then(d => {
+    saved = d || {};
+    Object.entries(saved).forEach(([k, v]) => applyKey(k, v));
+  }).catch(() => {});
+
+  /* ---- image helper: file → resized data URI ---- */
+  function fileToURI(file, maxDim, cb){
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const sc = Math.min(1, maxDim / Math.max(img.width, img.height));
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      URL.revokeObjectURL(url);
+      cb(cv.toDataURL('image/jpeg', .84));
+    };
+    img.src = url;
+  }
+  function imgField(currentSrc, maxDim, onSet){
+    const wrap = document.createElement('div');
+    const prev = document.createElement('div');
+    prev.className = 'cms-prev';
+    if (currentSrc) prev.style.backgroundImage = `url('${currentSrc}')`;
+    const drop = document.createElement('div');
+    drop.className = 'cms-drop';
+    drop.textContent = 'Drop gambar / klik buat upload';
+    const fi = document.createElement('input');
+    fi.type = 'file'; fi.accept = 'image/*'; fi.style.display = 'none';
+    const setImg = uri => { prev.style.backgroundImage = `url('${uri}')`; onSet(uri); };
+    drop.addEventListener('click', () => fi.click());
+    fi.addEventListener('change', () => { if (fi.files[0]) fileToURI(fi.files[0], maxDim, setImg); });
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+    drop.addEventListener('drop', e => {
+      e.preventDefault(); drop.classList.remove('over');
+      const f = e.dataTransfer.files[0];
+      if (f) fileToURI(f, maxDim, setImg);
+    });
+    const urlRow = document.createElement('div');
+    urlRow.className = 'cms-row'; urlRow.style.marginTop = '6px';
+    const urlIn = document.createElement('input');
+    urlIn.type = 'text'; urlIn.placeholder = 'atau paste link gambar…';
+    const urlBtn = document.createElement('button');
+    urlBtn.textContent = 'Pakai'; urlBtn.className = 'cms-add'; urlBtn.style.cssText = 'flex:0 0 auto;width:auto;margin:0;padding:6px 14px';
+    urlBtn.addEventListener('click', () => { if (urlIn.value.trim()) setImg(urlIn.value.trim()); });
+    urlRow.append(urlIn, urlBtn);
+    wrap.append(prev, drop, fi, urlRow);
+    return wrap;
+  }
+
+  /* ---- panel UI ---- */
+  let panel, loginBox;
+  function status(t){ const el = g('cmsStatus'); if (el) el.textContent = t || ''; }
+  function lbl(t){ const d = document.createElement('div'); d.className = 'cms-lbl'; d.textContent = t; return d; }
+  function txt(k, opts = {}){
+    const el = document.createElement(opts.area ? 'textarea' : 'input');
+    if (!opts.area) el.type = 'text';
+    el.value = cur(k);
+    el.addEventListener('input', () => set(k, el.value));
+    return el;
+  }
+  function sec(title, build){
+    const s = document.createElement('div'); s.className = 'cms-sec';
+    const btn = document.createElement('button');
+    btn.innerHTML = `${title} <span class="ar">›</span>`;
+    btn.addEventListener('click', () => s.classList.toggle('open'));
+    const f = document.createElement('div'); f.className = 'cms-fields';
+    build(f);
+    s.append(btn, f);
+    return s;
+  }
+  function listSec(f, key, fields, blank, extra){
+    const box = document.createElement('div');
+    const rebuild = () => {
+      box.innerHTML = '';
+      let arr; try{ arr = JSON.parse(cur(key)); }catch(e){ arr = []; }
+      const commit = () => set(key, JSON.stringify(arr));
+      arr.forEach((item, i) => {
+        const card = document.createElement('div'); card.className = 'cms-item';
+        const del = document.createElement('button');
+        del.className = 'cms-del'; del.textContent = 'hapus';
+        del.addEventListener('click', () => { arr.splice(i, 1); commit(); rebuild(); });
+        card.appendChild(del);
+        if (!fields.length){
+          const inp = document.createElement('input');
+          inp.type = 'text'; inp.value = item;
+          inp.style.marginTop = '4px';
+          inp.addEventListener('input', () => { arr[i] = inp.value; commit(); });
+          card.appendChild(inp);
+        }
+        fields.forEach(fd => {
+          card.appendChild(lbl(fd.l));
+          if (fd.type === 'select'){
+            const sl = document.createElement('select');
+            fd.opts.forEach(o => { const op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; sl.appendChild(op); });
+            sl.value = item[fd.k] || fd.opts[0][0];
+            sl.addEventListener('change', () => { item[fd.k] = sl.value; commit(); });
+            card.appendChild(sl);
+          } else if (fd.type === 'img'){
+            card.appendChild(imgField(item[fd.k], 900, uri => { item[fd.k] = uri; commit(); }));
+          } else if (fd.type === 'check'){
+            const cb = document.createElement('input'); cb.type = 'checkbox'; cb.style.width = 'auto';
+            cb.checked = !!item[fd.k];
+            cb.addEventListener('change', () => { item[fd.k] = cb.checked; commit(); });
+            card.appendChild(cb);
+          } else {
+            const inp = document.createElement(fd.type === 'area' ? 'textarea' : 'input');
+            if (fd.type !== 'area') inp.type = 'text';
+            inp.value = fd.get ? fd.get(item) : (item[fd.k] || '');
+            inp.addEventListener('input', () => { fd.setV ? fd.setV(item, inp.value) : item[fd.k] = inp.value; commit(); });
+            card.appendChild(inp);
+          }
+        });
+        if (extra) extra(card, item, commit);
+        box.appendChild(card);
+      });
+      const add = document.createElement('button');
+      add.className = 'cms-add'; add.textContent = '+ Tambah';
+      add.addEventListener('click', () => { arr.push(JSON.parse(JSON.stringify(blank))); commit(); rebuild(); });
+      box.appendChild(add);
+    };
+    rebuild();
+    f.appendChild(box);
+  }
+  const statsGet = it => (it.stats || []).map(s => `${s.n} ${s.l}`).join(', ');
+  const statsSet = (it, v) => {
+    const arr = v.split(',').map(s => {
+      const m = s.trim().match(/^([\d.,]+)\s+(.+)$/);
+      return m ? { n: +m[1].replace(/[.,]/g, ''), l: m[2] } : null;
+    }).filter(Boolean);
+    if (arr.length) it.stats = arr; else delete it.stats;
+  };
+
+  function buildBody(){
+    const b = g('cmsBody'); b.innerHTML = '';
+    b.appendChild(sec('Profile', f => {
+      f.appendChild(lbl('Foto profil (PFP)'));
+      f.appendChild(imgField(cur('pfp'), 320, uri => set('pfp', uri)));
+      f.appendChild(lbl('Nama')); f.appendChild(txt('hero.name'));
+      f.appendChild(lbl('Status pill')); f.appendChild(txt('hero.pill'));
+      f.appendChild(lbl('Roles (teks loop)'));
+      listSec(f, 'roles', [], 'New Role', null);
+    }));
+    b.appendChild(sec('About', f => {
+      f.appendChild(lbl('Judul 1')); f.appendChild(txt('me10h'));
+      f.appendChild(lbl('Isi 1')); f.appendChild(txt('me10p', { area: 1 }));
+      f.appendChild(lbl('Judul 2')); f.appendChild(txt('bgh'));
+      f.appendChild(lbl('Isi 2')); f.appendChild(txt('bgp', { area: 1 }));
+    }));
+    b.appendChild(sec('Career', f => {
+      f.appendChild(lbl('Paragraf 1')); f.appendChild(txt('careerP1', { area: 1 }));
+      f.appendChild(lbl('Paragraf 2')); f.appendChild(txt('careerP2', { area: 1 }));
+      f.appendChild(lbl('Paragraf 3')); f.appendChild(txt('careerP3', { area: 1 }));
+    }));
+    b.appendChild(sec('Articles', f => {
+      listSec(f, 'articles', [
+        { l: 'Judul', k: 't' }, { l: 'Meta (tahun · durasi)', k: 'meta' }, { l: 'Link', k: 'href' }
+      ], { t: 'Artikel baru', meta: '2026 · 5 min', href: '#' });
+    }));
+    b.appendChild(sec('Works (semua card)', f => {
+      f.appendChild(lbl('Intro Digital')); f.appendChild(txt('secDigitalP', { area: 1 }));
+      f.appendChild(lbl('Intro NFT')); f.appendChild(txt('secNftP', { area: 1 }));
+      f.appendChild(lbl('Intro Vibe Code')); f.appendChild(txt('secCodeP', { area: 1 }));
+      listSec(f, 'works', [
+        { l: 'Kategori', k: 'cat', type: 'select', opts: [['Digital','Digital'],['NFT','NFT'],['Vibe Code','Vibe Code']] },
+        { l: 'Judul', k: 't' }, { l: 'Meta', k: 'm' }, { l: 'Chip (mis. ETH / STARS)', k: 'chip' },
+        { l: 'Deskripsi', k: 'd', type: 'area' }, { l: 'Link project', k: 'link' },
+        { l: 'Chain NFT', k: 'chain', type: 'select', opts: [['','— none —'],['ETH','Ethereum (OpenSea)'],['STARS','Stargaze (Cosmos)']] },
+        { l: 'Contract address (CA)', k: 'ca' },
+        { l: 'Stats (mis: 999 Supply, 999 Minted)', k: 'stats', get: statsGet, setV: statsSet },
+        { l: 'Gambar card', k: 'img', type: 'img' }
+      ], { id: 'new' + Date.now(), cat: 'Digital', t: 'Project baru', m: 'META', d: 'Deskripsi…', g: 'linear-gradient(150deg,#233047,#7dffcf22,#141a26)' });
+    }));
+    b.appendChild(sec('Events', f => {
+      listSec(f, 'events', [
+        { l: 'Tahun', k: 'y' }, { l: 'Judul', k: 't' }, { l: 'Deskripsi', k: 'd', type: 'area' }, { l: 'Sedang berjalan (NOW)', k: 'now', type: 'check' }
+      ], { y: '2026', t: 'Event baru', d: 'Deskripsi…', now: false });
+    }));
+    b.appendChild(sec('Interactions', f => {
+      f.appendChild(lbl('Intro')); f.appendChild(txt('interP', { area: 1 }));
+      f.appendChild(lbl('Judul demo')); f.appendChild(txt('interCapT'));
+      f.appendChild(lbl('Deskripsi demo')); f.appendChild(txt('interCapP', { area: 1 }));
+    }));
+  }
+
+  function buildPanel(){
+    if (panel) return;
+    panel = document.createElement('div');
+    panel.id = 'cmsPanel';
+    panel.innerHTML = `
+      <div class="cms-head"><span class="cms-badge">Edit Mode</span><button id="cmsClose" title="Close">✕</button></div>
+      <div class="cms-body" id="cmsBody"></div>
+      <div class="cms-foot">
+        <span id="cmsStatus"></span>
+        <button id="cmsDiscard">Discard</button>
+        <button id="cmsLogout">Logout</button>
+        <button id="cmsSave" class="pri">Save</button>
+      </div>`;
+    document.body.appendChild(panel);
+    g('cmsClose').addEventListener('click', close);
+    g('cmsSave').addEventListener('click', save);
+    g('cmsDiscard').addEventListener('click', discard);
+    g('cmsLogout').addEventListener('click', () => {
+      token = ''; localStorage.removeItem('cms_token'); close();
+    });
+  }
+  function buildLogin(){
+    if (loginBox) return;
+    loginBox = document.createElement('div');
+    loginBox.id = 'cmsLogin';
+    loginBox.innerHTML = `
+      <div class="cms-login">
+        <h3>Owner login</h3>
+        <input type="password" id="cmsPw" placeholder="Password" autocomplete="current-password">
+        <div class="err" id="cmsErr"></div>
+        <button id="cmsGo">Masuk</button>
+      </div>`;
+    document.body.appendChild(loginBox);
+    const go = () => {
+      g('cmsErr').textContent = '';
+      fetch(API + '/auth/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: g('cmsPw').value })
+      }).then(r => { if (!r.ok) throw 0; return r.json(); })
+        .then(d => {
+          token = d.token; localStorage.setItem('cms_token', token);
+          loginBox.classList.remove('show'); openPanel();
+        })
+        .catch(() => { g('cmsErr').textContent = 'Password salah / server error'; });
+    };
+    g('cmsGo').addEventListener('click', go);
+    g('cmsPw').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    loginBox.addEventListener('click', e => { if (e.target === loginBox) loginBox.classList.remove('show'); });
+  }
+  function openPanel(){
+    buildPanel(); buildBody();
+    requestAnimationFrame(() => panel.classList.add('open'));
+    status(Object.keys(draft).length ? 'Unsaved changes' : '');
+  }
+  function open(){
+    if (!token){ buildLogin(); loginBox.classList.add('show'); setTimeout(() => g('cmsPw').focus(), 60); return; }
+    openPanel();
+  }
+  function close(){ if (panel) panel.classList.remove('open'); }
+  function save(){
+    if (!Object.keys(draft).length){ status('Nothing to save'); return; }
+    status('Saving…');
+    fetch(API + '/content', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ items: draft })
+    }).then(r => {
+      if (r.status === 401){ token = ''; localStorage.removeItem('cms_token'); buildLogin(); loginBox.classList.add('show'); throw 0; }
+      if (!r.ok) throw 0;
+      return r.json();
+    }).then(() => {
+      Object.assign(saved, draft); draft = {};
+      status('Saved ✓'); setTimeout(() => status(''), 2500);
+    }).catch(() => status('Save gagal — cek koneksi'));
+  }
+  function discard(){
+    Object.keys(draft).forEach(k => applyKey(k, (k in saved) ? saved[k] : DEF[k]));
+    draft = {};
+    buildBody(); status('Discarded');
+    setTimeout(() => status(''), 2000);
+  }
+  return { open };
+})();
 </script>
 
 </body>
