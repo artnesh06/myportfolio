@@ -67,9 +67,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .tb-icons{display:flex;align-items:center;gap:8px}
 .tb-icons button{background:none;border:none;color:var(--text);width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;opacity:.9}
 .tb-icons button:hover{opacity:1}
-.kbtn{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;color:var(--muted);background:none;cursor:pointer}
-.kbtn:hover{color:var(--text);border-color:var(--muted)}
+.tb-icons button.kbtn{display:inline-flex;align-items:center;gap:9px;width:auto;height:auto;font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:10px;padding:7px 8px 7px 12px;color:var(--muted);background:rgba(128,128,128,.06);cursor:pointer;min-width:190px}
+.tb-icons button.kbtn:hover{color:var(--text);border-color:var(--muted)}
 .kbtn svg{flex-shrink:0;opacity:.85}
+.kbtn .kb-ph{flex:1;text-align:left}
+.kbtn .kb-kbd{font-family:var(--mono);font-size:10.5px;border:1px solid var(--dockline);border-radius:6px;padding:2px 7px;background:rgba(128,128,128,.08)}
 .sd{display:inline-block;height:1.35em;line-height:1.35em;overflow:hidden}
 .sd>span{display:block;transition:transform .45s cubic-bezier(.35,1.3,.4,1)}
 .sd>span>i{display:block;font-style:normal;height:1.35em}
@@ -188,6 +190,8 @@ section b,section strong{color:var(--text);font-weight:600}
   .band>.cell{padding-left:22px;padding-right:22px;border-left:none;border-right:none}
   .pad{padding-top:56px;padding-bottom:56px}
   .tb-clock{font-size:12px}
+  .tb-icons button.kbtn{min-width:0;padding:6px 9px}
+  .kbtn .kb-ph{display:none}
   .grid{grid-template-columns:1fr}
   .demo-card{height:300px}
   .ovl{align-items:flex-end}
@@ -261,7 +265,7 @@ section b,section strong{color:var(--text);font-weight:600}
       <span id="dateline"></span>
     </div>
     <div class="tb-icons">
-      <button class="kbtn" id="kOpen"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>⌘K</button>
+      <button class="kbtn" id="kOpen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="kb-ph">Search</span><span class="kb-kbd">⌘K</span></button>
       <button id="muteBtn" title="Sound" style="display:none">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
       </button>
