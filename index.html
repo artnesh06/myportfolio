@@ -190,8 +190,7 @@ section b,section strong{color:var(--text);font-weight:600}
   .band>.cell{padding-left:22px;padding-right:22px;border-left:none;border-right:none}
   .pad{padding-top:56px;padding-bottom:56px}
   .tb-clock{font-size:12px}
-  .tb-icons button.kbtn{min-width:0;padding:6px 9px}
-  .kbtn .kb-ph{display:none}
+  .tb-icons button.kbtn{min-width:0}
   .grid{grid-template-columns:1fr}
   .demo-card{height:300px}
   .ovl{align-items:flex-end}
@@ -600,11 +599,13 @@ function marketLink(w){
 }
 function openWork(w, fromEl){
   const mkt = marketLink(w);
+  const chainLabel = {ETH:'Ethereum',STARS:'Cosmos'}[w.chain] || '';
   sheet.innerHTML = `<div class="grab"></div>
     <div class="sthumb thumb" style="${thumbBg(w)}"></div>
     <h3>${w.t}</h3><div class="cm">${w.m}</div>
     <p>${w.d}</p>
     ${w.stats ? `<div class="stats">${w.stats.map(s=>`<div class="st"><b>${s.n.toLocaleString('en-US')}</b><i>${s.l}</i></div>`).join('')}</div>` : ''}
+    ${w.ca ? `<div style="background:rgba(125,255,207,.08);border:1px solid var(--dockline);border-radius:10px;padding:12px;margin:14px 0;font-size:12.5px"><div style="color:var(--muted);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">${chainLabel || 'Contract'}</div><div style="color:var(--text);font-family:var(--mono);word-break:break-all">${w.ca}</div></div>` : ''}
     <div class="act">${mkt ? `<a href="${mkt.u}" target="_blank" rel="noopener">${mkt.l}</a>` : ''}${w.link ? `<a href="${w.link}" target="_blank" rel="noopener">Visit project</a>` : ''}<button onclick="closeOvl()">Close</button></div>`;
   ovl.classList.add('show');
   if (reduced) return;
