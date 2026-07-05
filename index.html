@@ -193,6 +193,88 @@ section b,section strong{color:var(--text);font-weight:600}
 .ci:hover,.ci.sel{background:rgba(128,128,128,.13)}
 .ci .cc{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
 
+/* nft carousel di sheet */
+.sthumb .nftc{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s ease}
+.sthumb .nftc.on{opacity:1}
+.sthumb .nftc-n{position:absolute;left:10px;bottom:8px;z-index:2;font-family:var(--mono);font-size:10.5px;color:#fff;background:rgba(0,0,0,.5);padding:3px 9px;border-radius:8px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.sthumb .nftc-n:empty{display:none}
+
+/* stack chips */
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.stack .schip{font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:10px;padding:5px 13px;color:var(--muted);transition:color .2s,border-color .2s}
+.stack .schip:hover{color:var(--text);border-color:var(--muted)}
+
+/* interactions demo grid */
+.demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
+.demo-grid .demo-card{height:220px;margin-top:0}
+.demo-grid .demo-cap b{font-size:15.5px}
+.demo-grid .demo-cap p{font-size:13.5px}
+.holdbtn{position:relative;overflow:hidden;border:none;background:#111;color:#fff;border-radius:14px;padding:15px 26px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
+.holdbtn .hb-fill{position:absolute;inset:0;background:var(--acc);transform:scaleX(0);transform-origin:left}
+.holdbtn .hb-t{position:relative;z-index:1;transition:color .2s}
+.holdbtn.done .hb-t{color:#111}
+.dslider{width:72%;position:relative;padding:20px 0}
+.ds-track{height:6px;border-radius:3px;background:#e4e4e4;position:relative}
+.ds-fill{position:absolute;left:0;top:0;bottom:0;background:#111;border-radius:3px;width:50%}
+.ds-knob{position:absolute;top:50%;left:50%;width:26px;height:26px;background:#fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.05);transform:translate(-50%,-50%);cursor:grab;touch-action:none}
+.ds-knob:active{cursor:grabbing}
+.ds-val{position:absolute;top:-36px;left:50%;transform:translateX(-50%);background:#111;color:#fff;font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:7px;opacity:0;transition:opacity .2s;white-space:nowrap}
+.dslider.drag .ds-val{opacity:1}
+
+/* contact form + guestbook */
+.email-row{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:9px 8px 9px 16px;margin:4px 0 22px;font-size:14px}
+.email-row button{background:none;border:1px solid var(--dockline);color:var(--muted);border-radius:8px;padding:5px 13px;font-family:var(--mono);font-size:11.5px;cursor:pointer}
+.email-row button:hover{color:var(--text);border-color:var(--muted)}
+#cform input,#cform textarea,.gb-form input{width:100%;box-sizing:border-box;background:rgba(128,128,128,.06);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:12px 14px;font:inherit;font-size:14.5px;outline:none}
+#cform input:focus,#cform textarea:focus,.gb-form input:focus{border-color:var(--muted)}
+#cform textarea{min-height:120px;resize:vertical;margin-top:10px;line-height:1.6}
+.cf-row{display:flex;gap:10px}
+.cf-row>input{flex:1}
+.cf-actions{display:flex;align-items:center;gap:14px;margin-top:12px}
+.cf-send{background:var(--text);color:var(--bg);border:none;border-radius:11px;padding:12px 22px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.cf-send:hover{opacity:.9}
+.cf-status{font-size:11.5px;color:var(--muted)}
+.gb-form{margin:14px 0 6px}
+.gb-form .cf-row{margin-top:10px}
+.gb-addr{font-size:11.5px;color:#7dffcf;margin-top:12px}
+.gb-list{margin-top:22px}
+.gb-item{border-top:1px solid var(--line);padding:13px 0}
+.gb-item .gm{color:var(--text);font-size:14.5px}
+.gb-item .ga{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px;display:flex;gap:10px}
+
+/* polaroid grid */
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px 22px;padding:64px 44px}
+.ph2{position:relative;aspect-ratio:4/5;background-size:cover;background-position:center;border:8px solid #fff;border-bottom-width:38px;border-radius:3px;box-shadow:0 8px 30px rgba(0,0,0,.45);transition:transform .35s ease}
+.ph2:nth-child(3n+1){transform:rotate(-3.5deg)}
+.ph2:nth-child(3n+2){transform:rotate(2.2deg)}
+.ph2:nth-child(3n){transform:rotate(-1.4deg)}
+.ph2:hover{transform:rotate(0) translateY(-10px)}
+.ph2 .cap{position:absolute;left:-8px;right:-8px;bottom:-34px;text-align:center;font-family:var(--mono);font-size:10px;color:#555;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* blog post view */
+.postview{position:fixed;inset:0;z-index:65;background:var(--bg);overflow-y:auto;display:none}
+.postview.show{display:block}
+.pv-band{min-height:100%}
+.pv-cell{padding-top:96px;padding-bottom:120px}
+.pv-back{background:none;border:1px solid var(--line);color:var(--muted);border-radius:10px;padding:7px 15px;font:inherit;font-size:13px;cursor:pointer;margin-bottom:34px}
+.pv-back:hover{color:var(--text);border-color:var(--muted)}
+.pv-title{font-size:34px;line-height:1.25;margin:6px 0 26px;letter-spacing:-.01em}
+.pv-body{color:var(--muted);font-size:16.5px}
+.pv-body p{margin:1.3em 0}
+.pv-body h2{font-size:21px;color:var(--text);margin:2em 0 .6em}
+.pv-body h3{font-size:17px;color:var(--text);margin:1.8em 0 .5em}
+.pv-body b,.pv-body strong{color:var(--text)}
+.pv-body ul{margin:1.2em 0;padding-left:22px}
+.pv-body li{margin:.45em 0}
+.pv-body blockquote{border-left:2px solid var(--acc);padding-left:16px;margin:1.4em 0;color:var(--text);font-style:italic}
+.pv-body hr{border:none;border-top:1px solid var(--line);margin:2.2em 0}
+.pv-body a{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+.pv-body code{font-family:var(--mono);font-size:13.5px;background:rgba(128,128,128,.12);border-radius:5px;padding:1px 6px}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,16px);z-index:97;background:var(--text);color:var(--bg);font-size:12px;padding:9px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
 @media (max-width:780px){
   :root{--col:100%}
   .band>.cell{padding-left:22px;padding-right:22px;border-left:none;border-right:none}
@@ -205,6 +287,14 @@ section b,section strong{color:var(--text);font-weight:600}
   .dl-x{display:none}
   .grid{grid-template-columns:1fr}
   .demo-card{height:300px}
+  .demo-grid{grid-template-columns:1fr}
+  .demo-grid .demo-card{height:240px}
+  .photos-grid{gap:22px 12px;padding:40px 22px}
+  .ph2{border-width:5px;border-bottom-width:26px}
+  .ph2 .cap{font-size:8.5px;bottom:-23px;left:-5px;right:-5px}
+  .cf-row{flex-direction:column}
+  .pv-cell{padding-top:72px}
+  .pv-title{font-size:26px}
   .ovl{align-items:flex-end}
   .sheet{width:100%;max-height:88vh;border-radius:20px 20px 0 0;border-bottom:none}
   .sheet .grab{display:block}
@@ -309,6 +399,12 @@ section b,section strong{color:var(--text);font-weight:600}
       <h2 id="bgh">What's your background?</h2>
       <p id="bgp">I work full-time in a Culture &amp; Live team by day, and run my own design and Web3 practice on the side. Over the past few years that's grown into launching NFT collections, building launchpads, and coding full product sites myself — design and dev in one person.</p>
     </section>
+
+    <section>
+      <div class="eyebrow">Stack</div>
+      <h2>Tools I use daily</h2>
+      <div class="stack" id="stackList"></div>
+    </section>
   </div>
 </div>
 
@@ -321,7 +417,7 @@ section b,section strong{color:var(--text);font-weight:600}
       <p id="careerP1">Currently, I run my own independent design and Web3 practice, partnering with collectors, founders, and communities across NFT, art, and creative tech. Most of my work focuses on turning raw ideas into finished products — identity, artwork, site, and contract, all shipped by one person.</p>
       <p id="careerP2">Over the past few years, I've launched collections like <b>Punkers V2</b>, <b>Manthy</b>, and the original <b>Punkers</b>, built products like <b>Underdrip</b>, <b>YourSpace</b>, and <b>Odds Launchpad</b>, and run live art events like <b>SipandDrip</b> and <b>Mural24Jam</b>.</p>
       <p id="careerP3">Today, I bring all of that together through visual design, NFT art direction, and AI-assisted coding — mostly for Web3 communities and creative products.</p>
-      <a class="link" href="#">Read full resume
+      <a class="link" href="#" id="resumeLink" style="display:none" target="_blank" rel="noopener">Read full resume
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="18" x2="18" y2="6"/><polyline points="8 6 18 6 18 16"/></svg>
       </a>
     </section>
@@ -335,11 +431,7 @@ section b,section strong{color:var(--text);font-weight:600}
     <section>
       <div class="eyebrow">Writing</div>
       <h2>Articles</h2>
-      <div id="articlesList">
-      <a class="arow" href="#"><span class="at">Designing 999 traits without losing the vibe</span><span class="ad">2026 · 6 min</span></a>
-      <a class="arow" href="#"><span class="at">Free mint economics: what Punkers V2 taught me</span><span class="ad">2025 · 8 min</span></a>
-      <a class="arow" href="#"><span class="at">One-person pipeline: from Figma to mainnet</span><span class="ad">2025 · 5 min</span></a>
-      </div>
+      <div id="articlesList"></div>
     </section>
   </div>
 </div>
@@ -406,12 +498,37 @@ section b,section strong{color:var(--text);font-weight:600}
     <section>
       <h2 class="bl">Interactions</h2>
       <p id="interP">A collection of micro-interactions, motion experiments, and UI details I've been exploring. Small ideas, prototypes, and interaction patterns that help me learn, test, and refine how interfaces feel.</p>
-      <div class="demo-card">
-        <button class="switch" id="demoSwitch" aria-label="Toggle switch demo"><span class="knob"></span></button>
-      </div>
-      <div class="demo-cap">
-        <b id="interCapT">Switch</b>
-        <p id="interCapP">A simple toggle interaction with subtle motion, sound, and spring physics.</p>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <div class="demo-card">
+            <button class="switch" id="demoSwitch" aria-label="Toggle switch demo"><span class="knob"></span></button>
+          </div>
+          <div class="demo-cap">
+            <b id="interCapT">Switch</b>
+            <p id="interCapP">A simple toggle interaction with subtle motion, sound, and spring physics.</p>
+          </div>
+        </div>
+        <div class="demo-item">
+          <div class="demo-card">
+            <button class="holdbtn" id="demoHold"><span class="hb-fill"></span><span class="hb-t">Hold to confirm</span></button>
+          </div>
+          <div class="demo-cap">
+            <b>Hold to confirm</b>
+            <p>Press and hold — the fill charges up, then snaps into a confirmed state.</p>
+          </div>
+        </div>
+        <div class="demo-item">
+          <div class="demo-card">
+            <div class="dslider" id="demoSlider">
+              <div class="ds-track"><div class="ds-fill"></div></div>
+              <div class="ds-knob"><span class="ds-val">50</span></div>
+            </div>
+          </div>
+          <div class="demo-cap">
+            <b>Slider</b>
+            <p>Custom range with a value bubble and tick feedback while dragging.</p>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -419,16 +536,70 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band">
-  <div class="cell photos">
-    <div class="ph" style="left:6%;transform:rotate(-8deg);background:linear-gradient(160deg,#2d2d44,#7dffcf33,#1a1a2e)"></div>
-    <div class="ph" style="left:28%;bottom:-38px;transform:rotate(-3deg);background:linear-gradient(200deg,#442d3a,#ff7d9c33,#2e1a24)"></div>
-    <div class="ph" style="left:50%;transform:rotate(3deg);background:linear-gradient(140deg,#2d4436,#c9ff7d33,#1a2e20)"></div>
-    <div class="ph" style="left:72%;bottom:-42px;transform:rotate(8deg);background:linear-gradient(180deg,#44402d,#ffd97d33,#2e2a1a)"></div>
+<div class="band" id="contact">
+  <div class="cell pad">
+    <section>
+      <div class="eyebrow">Contact</div>
+      <h2>Work with me</h2>
+      <p id="contactP">Have a project, a collab, or just want to say hi? Drop a message — it lands straight in my inbox.</p>
+      <div class="email-row">
+        <span class="mono" id="emailTxt">artnesh06@gmail.com</span>
+        <button id="copyEmail" type="button">Copy</button>
+      </div>
+      <form id="cform" novalidate>
+        <div class="cf-row">
+          <input type="text" id="cfName" placeholder="Name" autocomplete="name">
+          <input type="email" id="cfEmail" placeholder="Email" autocomplete="email">
+        </div>
+        <textarea id="cfMsg" placeholder="Tell me about it…"></textarea>
+        <div class="cf-actions">
+          <button type="submit" class="cf-send">Send message</button>
+          <span class="cf-status mono" id="cfStatus"></span>
+        </div>
+      </form>
+    </section>
+
+    <section>
+      <div class="eyebrow">Onchain</div>
+      <h2>Guestbook</h2>
+      <p>Connect a wallet, sign a note, leave your mark — no gas, just a signature.</p>
+      <div class="gb-form">
+        <button id="gbConnect" class="cf-send" type="button">Connect wallet</button>
+        <div id="gbCompose" style="display:none">
+          <div class="mono gb-addr" id="gbAddr"></div>
+          <div class="cf-row">
+            <input type="text" id="gbMsg" maxlength="180" placeholder="Leave a note…">
+            <button id="gbPost" class="cf-send" type="button" style="flex:0 0 auto">Sign &amp; post</button>
+          </div>
+        </div>
+        <span class="cf-status mono" id="gbStatus"></span>
+      </div>
+      <div class="gb-list" id="gbList"></div>
+    </section>
   </div>
 </div>
 
+<div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
+
+<div class="band">
+  <div class="cell photos-grid" id="photosGrid"></div>
+</div>
+
 </main>
+
+<!-- blog post view -->
+<div class="postview" id="postview">
+  <div class="band pv-band">
+    <div class="cell pv-cell">
+      <button class="pv-back" id="pvBack" type="button">&larr; Back</button>
+      <div class="eyebrow" id="pvMeta"></div>
+      <h1 class="pv-title" id="pvTitle"></h1>
+      <div class="pv-body" id="pvBody"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast mono" id="toast"></div>
 
 <div class="bblur" id="bblur"></div>
 
@@ -549,6 +720,213 @@ const hio = new IntersectionObserver(es=>es.forEach(e=>{
 document.querySelectorAll('section h2').forEach(h=>{ split(h); hio.observe(h); });
 
 /* ---- text loop role ---- */
+const API_BASE = 'https://api-portfolio.artnesh.cloud';
+
+let STACK = ['Figma','Photoshop','Illustrator','Procreate','Claude Code','Solidity','CosmWasm','FastAPI','Coolify','After Effects'];
+function renderStack(){
+  g('stackList').innerHTML = STACK.map(s=>`<span class="schip">${s}</span>`).join('');
+}
+renderStack();
+
+let PHOTOS = [
+  {img:'', cap:'sipanddrip — live mural'},
+  {img:'', cap:'punkers wip'},
+  {img:'', cap:'studio desk'},
+  {img:'', cap:'mural24jam'},
+  {img:'', cap:'trait sheets'},
+  {img:'', cap:'event night'},
+  {img:'', cap:'sketchbook'},
+  {img:'', cap:'setup'},
+  {img:'', cap:'jakarta'}
+];
+const PH_GRADS = [
+  'linear-gradient(160deg,#2d2d44,#7dffcf33,#1a1a2e)','linear-gradient(200deg,#442d3a,#ff7d9c33,#2e1a24)',
+  'linear-gradient(140deg,#2d4436,#c9ff7d33,#1a2e20)','linear-gradient(180deg,#44402d,#ffd97d33,#2e2a1a)',
+  'linear-gradient(150deg,#233047,#7dffcf22,#141a26)','linear-gradient(210deg,#3a2d44,#c07dff33,#241a2e)',
+  'linear-gradient(170deg,#2d3c44,#7dd8ff33,#1a262e)','linear-gradient(190deg,#442d2d,#ff9d7d33,#2e1a1a)',
+  'linear-gradient(155deg,#35442d,#a8ff7d33,#212e1a)'
+];
+function renderPhotos(){
+  g('photosGrid').innerHTML = PHOTOS.map((p,i)=>{
+    const bg = p.img ? `background-image:url('${p.img}')` : `background:${PH_GRADS[i % PH_GRADS.length]}`;
+    return `<div class="ph2" style="${bg}"><span class="cap">${p.cap || ''}</span></div>`;
+  }).join('');
+}
+renderPhotos();
+
+/* ---- blog posts ---- */
+let POSTS = [
+  {
+    slug: 'designing-999-traits',
+    t: 'Designing 999 traits without losing the vibe',
+    meta: '2026 · 6 min',
+    body: `Every generative PFP collection starts the same way: one character you actually love. Then someone says the word supply and suddenly you owe the world 999 of them. This is the part nobody warns you about — going from one drawing to a system that can produce a thousand without turning into soup.
+
+## Start from silhouette, not from traits
+
+The mistake I made on the first Punkers was starting with a trait list. Hats, glasses, backgrounds — a spreadsheet of stuff. What you actually need first is a silhouette strong enough that any combination still reads as *your* character. If the base shape carries the identity, traits become seasoning instead of the whole meal.
+
+For Punkers V2 I redrew the base head maybe thirty times before touching a single accessory. Boring work. Worth it. When the silhouette locked, everything after moved twice as fast.
+
+## The 70-20-10 rule
+
+My working split for trait energy:
+
+- **70% quiet traits** — clean colorways, subtle variations. These make the collection feel cohesive in a grid.
+- **20% loud traits** — statement pieces people screenshot and set as PFPs.
+- **10% unhinged** — the cursed ones. The lasers. The thing your group chat begs you not to ship. Ship it.
+
+If everything is loud, nothing is. The quiet majority is what makes the loud ones hit.
+
+## Rarity is storytelling
+
+Rarity tables are usually treated as math. They are actually narrative. A 1-of-8 trait is a rumor; a 1-of-1 is a legend. When I plan rarity I ask one question: what will people brag about? Design backwards from the flex.
+
+## Fight the soup
+
+Around trait number 60, every collection starts looking like soup — combinations begin to clash, palettes drift, and the grid gets muddy. My fixes:
+
+- Lock a global palette early. Every trait pulls from it. No exceptions.
+- Test in grids of 100, not one by one. The grid is how collectors see it.
+- Kill your favorites. If a trait only works with three other traits, it is a liability, not a treasure.
+
+## The vibe check
+
+At the end I render 999 and scroll fast. Not inspecting — scrolling. If my thumb stops by itself, that region of the collection works. If it glides past a whole section, something there is wallpaper. Redraw it.
+
+999 characters is not 999 drawings. It is one drawing, systematized, with its soul intact. Protect the soul first — the spreadsheet can wait.`
+  },
+  {
+    slug: 'free-mint-economics',
+    t: 'Free mint economics: what Punkers V2 taught me',
+    meta: '2025 · 8 min',
+    body: `Punkers V2 was a 999-supply free mint on Ethereum. No mint price, no whitelist grind, no promises of utility. Just art, a contract, and a mint site — all shipped by one person. Here is what the free mint model actually taught me about how value moves in NFT communities.
+
+## Free is a price, and it is a loud one
+
+A free mint says: I am confident enough in this art that I am not charging you to find out. That signal attracts a completely different crowd than a 0.05 ETH mint. You get collectors who choose the art, not investors who chose a lottery ticket. The mint-out is slower, the floor is thinner, but the holders actually like what they hold.
+
+## Where the money actually goes
+
+With mint price at zero, the economics compress into three places:
+
+- **Royalties** — small, unreliable since marketplaces made them optional, but nonzero.
+- **Reputation** — the real yield. Punkers V2 became the portfolio piece that opened doors to paid work.
+- **The next thing** — a free collection is a distribution list. Every holder is someone who already opted in to your art.
+
+I stopped thinking of the collection as a product and started treating it as marketing with a soul. That reframe changed everything about what "success" meant.
+
+## Gas is your real mint price
+
+Zero mint plus Ethereum gas still means people pay something. On a bad gas day your free mint quietly costs more than a paid mint on an L2. Timing the deploy and mint window around gas mattered more than any marketing push I did.
+
+## The 30-day cliff
+
+Every collection, free or paid, hits a silence around day 30. Mint hype dies, the floor finds its level, and the group chat slows down. This is where most projects die — not from failure, from awkward silence. What kept Punkers alive was embarrassingly simple: I kept posting art. New derivatives, wallpapers, trait spotlights. Consistency beat roadmaps.
+
+> Holders do not leave because the floor drops. They leave because the artist did.
+
+## What I would repeat
+
+- Free mint for art-first projects with no promised utility. The honesty scales.
+- Tiny supply. 999 felt scarce without being exclusionary.
+- Shipping everything myself. Slower, but every decision stayed coherent.
+
+## What I would change
+
+- Deploy on an L2 or a cheaper chain and remove the gas barrier entirely.
+- Prepare the day-30 content calendar before mint, not during the cliff.
+- Set royalties low and publicly commit to them, rather than hoping.
+
+Free mints will not make you rich on primary. They make you *known* — and for an independent artist, known is the asset that compounds.`
+  },
+  {
+    slug: 'one-person-pipeline',
+    t: 'One-person pipeline: from Figma to mainnet',
+    meta: '2025 · 5 min',
+    body: `People assume shipping a Web3 product needs a team: designer, frontend dev, contract dev, someone for infra. I ship them alone — not because I mastered four jobs, but because the pipeline between the jobs got short enough for one person to walk it. Here is the actual pipeline.
+
+## Stage 1 — Figma, but shallow
+
+I design maybe 60% fidelity in Figma. Layout, type scale, the two or three components that define the feel. Then I stop. Anything past that is decoration I will end up redesigning in code anyway. The file is a compass, not a blueprint.
+
+## Stage 2 — Vibe code the frontend
+
+I build with AI-assisted coding — describing intent, reviewing output, steering. The trick nobody tells you: AI is fast at producing code and terrible at taste. My job in this stage is taste enforcement. Spacing, easing curves, the way a dialog morphs instead of pops. The model writes; I art-direct.
+
+One rule that keeps quality up: **never accept code I cannot explain.** If I cannot say why a block exists, it gets rewritten until I can. That is the difference between vibe coding and gambling.
+
+## Stage 3 — Contracts, carefully
+
+Smart contracts are where vibe coding stops. The stakes flip — a frontend bug annoys, a contract bug burns. For CosmWasm and Solidity work I move slow, use audited base contracts, keep custom logic minimal, and test on testnet until it is boring.
+
+- Fork from battle-tested standards, never from scratch
+- Write the deploy script the same day as the contract
+- Testnet mint with real wallets, real metadata, real everything
+
+## Stage 4 — Infra you own
+
+Everything runs on a VPS I control — sites, APIs, databases, backups. Owning the deploy pipeline means a broken build at 2am is a me-problem with a me-solution, not a support ticket. Self-hosting used to be the hard part; with modern tooling it is a weekend setup that pays rent forever.
+
+## Why one person works
+
+Handoffs are where products die. Every handoff loses intent — the designer means one thing, the dev reads another, the contract guy never saw the design at all. With one person there are zero handoffs. The vision that starts in Figma is the same vision that hits mainnet.
+
+The tools finally caught up to the ambition. If you can hold design taste and system thinking in the same head, the pipeline is yours to walk.`
+  }
+];
+
+function renderPosts(){
+  g('articlesList').innerHTML = POSTS.map(p =>
+    `<a class="arow" href="#post/${p.slug}"><span class="at">${p.t}</span><span class="ad">${p.meta || ''}</span></a>`
+  ).join('');
+}
+renderPosts();
+
+/* ---- markdown mini parser ---- */
+function mdToHtml(md){
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const inline = s => s
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g,'<em>$1</em>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  let html = '', inList = false, para = [];
+  const flush = () => { if (para.length){ html += '<p>' + inline(para.join(' ')) + '</p>'; para = []; } };
+  for (const raw of md.split('\n')){
+    const t = esc(raw).trim();
+    if (t.startsWith('- ')){ flush(); if (!inList){ html += '<ul>'; inList = true; } html += '<li>' + inline(t.slice(2)) + '</li>'; continue; }
+    if (inList){ html += '</ul>'; inList = false; }
+    if (!t){ flush(); continue; }
+    if (t.startsWith('### ')){ flush(); html += '<h3>' + inline(t.slice(4)) + '</h3>'; continue; }
+    if (t.startsWith('## ')){ flush(); html += '<h2>' + inline(t.slice(3)) + '</h2>'; continue; }
+    if (t.startsWith('# ')){ flush(); html += '<h2>' + inline(t.slice(2)) + '</h2>'; continue; }
+    if (t === '---'){ flush(); html += '<hr>'; continue; }
+    if (t.startsWith('&gt; ')){ flush(); html += '<blockquote>' + inline(t.slice(5)) + '</blockquote>'; continue; }
+    para.push(t);
+  }
+  if (inList) html += '</ul>';
+  flush();
+  return html;
+}
+
+/* ---- blog router (#post/slug) ---- */
+function routePost(){
+  const pv = g('postview');
+  const m = location.hash.match(/^#post\/(.+)$/);
+  if (!m){ pv.classList.remove('show'); document.body.style.overflow = ''; return; }
+  const post = POSTS.find(p => p.slug === decodeURIComponent(m[1]));
+  if (!post){ pv.classList.remove('show'); document.body.style.overflow = ''; return; }
+  g('pvMeta').textContent = post.meta || '';
+  g('pvTitle').textContent = post.t;
+  g('pvBody').innerHTML = mdToHtml(post.body || '');
+  pv.classList.add('show');
+  pv.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+g('pvBack').addEventListener('click', () => { location.hash = '#work'; });
+addEventListener('hashchange', routePost);
+routePost();
+
 let ROLES = ['Graphic Designer','NFT Artist','Vibe Coder','Event Runner'];
 const loop = g('loop');
 let li = 0;
@@ -615,11 +993,12 @@ const CHAINS = {
   STARS: { name: 'Cosmos', market: 'stargaze', url: 'https://stargaze.zone/m/' }
 };
 function marketLink(w){
-  if (!w.ca || !w.chain) return null;
+  if (!w.chain) return null;
   const ch = CHAINS[w.chain];
-  if (!ch) return null;
+  if (!ch || (!w.ca && !w.link)) return null;
   const label = ch.market === 'stargaze' ? 'View on Stargaze' : 'View on OpenSea';
-  return { u: ch.url + w.ca, l: label };
+  // link manual (slug collection) lebih akurat daripada URL dari CA
+  return { u: w.link || (ch.url + w.ca), l: label, usedLink: !!w.link };
 }
 function openWork(w, fromEl){
   const mkt = marketLink(w);
@@ -630,7 +1009,42 @@ function openWork(w, fromEl){
     <p>${w.d}</p>
     ${w.stats ? `<div class="stats">${w.stats.map(s=>`<div class="st"><b>${s.n.toLocaleString('en-US')}</b><i>${s.l}</i></div>`).join('')}</div>` : ''}
     ${w.ca ? `<div style="background:rgba(125,255,207,.08);border:1px solid var(--dockline);border-radius:10px;padding:12px;margin:14px 0;font-size:12.5px"><div style="color:var(--muted);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">${chainLabel || 'Contract'}</div><div style="color:var(--text);font-family:var(--mono);word-break:break-all">${w.ca}</div></div>` : ''}
-    <div class="act">${mkt ? `<a href="${mkt.u}" target="_blank" rel="noopener">${mkt.l}</a>` : ''}${w.link ? `<a href="${w.link}" target="_blank" rel="noopener">Visit project</a>` : ''}<button onclick="closeOvl()">Close</button></div>`;
+    <div class="act">${mkt ? `<a href="${mkt.u}" target="_blank" rel="noopener">${mkt.l}</a>` : ''}${w.link && !(mkt && mkt.usedLink) ? `<a href="${w.link}" target="_blank" rel="noopener">Visit project</a>` : ''}<button onclick="closeOvl()">Close</button></div>`;
+  // track view + tampilkan jumlah views (skip kalau owner)
+  const wid = w.id || w.t;
+  if (!localStorage.getItem('cms_token')){
+    fetch(API_BASE + '/track', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ t:'work', ref: wid }) }).catch(()=>{});
+  }
+  fetch(API_BASE + '/views?refs=' + encodeURIComponent(wid)).then(r=>r.ok?r.json():{}).then(v=>{
+    const n = v[wid];
+    const cm = sheet.querySelector('.cm');
+    if (n && cm) cm.textContent += '  ·  ' + n + ' view' + (n > 1 ? 's' : '');
+  }).catch(()=>{});
+  // NFT carousel: ambil beberapa token dari collection buat preview
+  if (w.chain && w.ca){
+    fetch(`${API_BASE}/nfts/${encodeURIComponent(w.chain)}/${encodeURIComponent(w.ca)}`)
+      .then(r => r.ok ? r.json() : { items: [] })
+      .then(d => {
+        const items = (d.items || []).slice(0, 10);
+        const th = sheet.querySelector('.sthumb');
+        if (!items.length || !th) return;
+        th.innerHTML = items.map((it, i) =>
+          `<img class="nftc${i ? '' : ' on'}" src="${it.img}" alt="" loading="lazy">`
+        ).join('') + '<div class="nftc-n"></div>';
+        const imgs = th.querySelectorAll('.nftc');
+        const nameEl = th.querySelector('.nftc-n');
+        nameEl.textContent = items[0].name || '';
+        let idx = 0;
+        if (sheet.__nftT) clearInterval(sheet.__nftT);
+        sheet.__nftT = setInterval(() => {
+          if (!document.body.contains(th)){ clearInterval(sheet.__nftT); return; }
+          imgs[idx].classList.remove('on');
+          idx = (idx + 1) % imgs.length;
+          imgs[idx].classList.add('on');
+          nameEl.textContent = items[idx].name || '';
+        }, 2200);
+      }).catch(()=>{});
+  }
   ovl.classList.add('show');
   if (reduced) return;
   sheet.style.transition = 'none';
@@ -654,9 +1068,12 @@ let ITEMS = [];
 function buildItems(){
   ITEMS = [
     ...WORKS.map(w=>({t:w.t, c:w.cat, run:()=>{ closeOvl(); openWork(w, document.body); }})),
+    ...POSTS.map(p=>({t:'Read: ' + p.t, c:'Blog', run:()=>{ closeOvl(); location.hash='#post/' + p.slug; }})),
     {t:'Go to Home', c:'Nav', run:()=>{ closeOvl(); location.hash='#home'; }},
     {t:'Go to Work', c:'Nav', run:()=>{ closeOvl(); location.hash='#work'; }},
     {t:'Go to Interactions', c:'Nav', run:()=>{ closeOvl(); location.hash='#interactions'; }},
+    {t:'Go to Contact', c:'Nav', run:()=>{ closeOvl(); location.hash='#contact'; }},
+    {t:'Copy email', c:'Contact', run:()=>{ closeOvl(); copyEmail(); }},
     {t:'Work with me — email', c:'Contact', run:()=>location.href='mailto:artnesh06@gmail.com'},
     {t:'X / Twitter — @artnesh', c:'Contact', run:()=>open('https://x.com/artnesh')},
     {t:'Edit Mode', c:'Owner', run:()=>{ closeOvl(); CMS.open(); }}
@@ -726,9 +1143,161 @@ g('demoSwitch').addEventListener('click', function(){
   clickSnd(this.classList.contains('on') ? 880 : 520);
 });
 
+/* ---- demo: hold to confirm ---- */
+const hb = g('demoHold'), hbFill = hb.querySelector('.hb-fill'), hbTxt = hb.querySelector('.hb-t');
+let hbT = null, hbDone = false;
+function hbReset(){
+  hbDone = false;
+  hbFill.style.transition = 'transform .3s';
+  hbFill.style.transform = 'scaleX(0)';
+  hb.classList.remove('done');
+  hbTxt.textContent = 'Hold to confirm';
+}
+hb.addEventListener('pointerdown', e => {
+  if (hbDone) return;
+  try{ hb.setPointerCapture(e.pointerId); }catch(err){}
+  hbFill.style.transition = 'none';
+  const t0 = performance.now();
+  clearInterval(hbT);
+  hbT = setInterval(() => {
+    const p = Math.min(1, (performance.now() - t0) / 900);
+    hbFill.style.transform = 'scaleX(' + p + ')';
+    if (p >= 1){
+      clearInterval(hbT);
+      hbDone = true;
+      hb.classList.add('done');
+      hbTxt.textContent = 'Confirmed ✓';
+      clickSnd(880);
+      setTimeout(hbReset, 1600);
+    }
+  }, 16);
+});
+['pointerup','pointercancel'].forEach(ev => hb.addEventListener(ev, () => {
+  if (hbDone) return;
+  clearInterval(hbT);
+  hbFill.style.transition = 'transform .35s cubic-bezier(.3,1.3,.4,1)';
+  hbFill.style.transform = 'scaleX(0)';
+}));
+
+/* ---- demo: slider ---- */
+const ds = g('demoSlider'), dsKnob = ds.querySelector('.ds-knob'), dsFill = ds.querySelector('.ds-fill'), dsVal = ds.querySelector('.ds-val');
+let dsLastTick = 50;
+function dsSet(v){
+  v = Math.max(0, Math.min(100, v));
+  dsKnob.style.left = v + '%';
+  dsFill.style.width = v + '%';
+  dsVal.textContent = Math.round(v);
+  const tick = Math.round(v / 10) * 10;
+  if (tick !== dsLastTick){ dsLastTick = tick; clickSnd(420 + tick * 4); }
+}
+dsKnob.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  try{ dsKnob.setPointerCapture(e.pointerId); }catch(err){}
+  ds.classList.add('drag');
+  const track = ds.querySelector('.ds-track').getBoundingClientRect();
+  const move = ev => dsSet((ev.clientX - track.left) / track.width * 100);
+  const up = () => { ds.classList.remove('drag'); removeEventListener('pointermove', move); removeEventListener('pointerup', up); };
+  addEventListener('pointermove', move);
+  addEventListener('pointerup', up);
+});
+
+/* ---- toast + copy email ---- */
+function showToast(t){
+  const el = g('toast');
+  el.textContent = t;
+  el.classList.add('show');
+  clearTimeout(el.__t);
+  el.__t = setTimeout(() => el.classList.remove('show'), 1800);
+}
+function copyEmail(){
+  navigator.clipboard.writeText(g('emailTxt').textContent)
+    .then(() => showToast('Email copied ✓'))
+    .catch(() => showToast('Copy failed'));
+}
+g('copyEmail').addEventListener('click', copyEmail);
+
+/* ---- contact form ---- */
+g('cform').addEventListener('submit', e => {
+  e.preventDefault();
+  const msg = g('cfMsg').value.trim();
+  const st = g('cfStatus');
+  if (msg.length < 2){ st.textContent = 'Write a message first'; return; }
+  st.textContent = 'Sending…';
+  fetch(API_BASE + '/contact', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: g('cfName').value, email: g('cfEmail').value, message: msg })
+  }).then(r => {
+    if (!r.ok) throw 0;
+    g('cform').reset();
+    st.textContent = 'Sent ✓ — thanks, I read everything.';
+  }).catch(() => st.textContent = 'Failed — try again, or just email me.');
+});
+
+/* ---- onchain guestbook ---- */
+const GB_PREFIX = 'Sign to post on artnesh.cloud guestbook:\n\n';
+let gbAddr = '';
+const shortAddr = a => a.slice(0, 6) + '…' + a.slice(-4);
+function timeAgo(iso){
+  const s = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s / 60) + 'm ago';
+  if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+  return Math.floor(s / 86400) + 'd ago';
+}
+function loadGuestbook(){
+  fetch(API_BASE + '/guestbook').then(r => r.ok ? r.json() : []).then(list => {
+    if (!list.length) return;
+    g('gbList').innerHTML = list.map(it =>
+      `<div class="gb-item"><div class="gm"></div><div class="ga"><span>${shortAddr(it.address)}</span><span>${timeAgo(it.created_at)}</span></div></div>`
+    ).join('');
+    g('gbList').querySelectorAll('.gm').forEach((el, i) => { el.textContent = list[i].message; });
+  }).catch(() => {});
+}
+loadGuestbook();
+g('gbConnect').addEventListener('click', async () => {
+  const st = g('gbStatus');
+  if (!window.ethereum){ st.textContent = 'No wallet found — install MetaMask first'; return; }
+  try{
+    const acc = await ethereum.request({ method: 'eth_requestAccounts' });
+    gbAddr = acc[0];
+    g('gbAddr').textContent = 'Connected: ' + shortAddr(gbAddr);
+    g('gbConnect').style.display = 'none';
+    g('gbCompose').style.display = '';
+    st.textContent = '';
+  }catch(e){ st.textContent = 'Connection cancelled'; }
+});
+g('gbPost').addEventListener('click', async () => {
+  const st = g('gbStatus');
+  const msg = g('gbMsg').value.trim();
+  if (msg.length < 2){ st.textContent = 'Write something first'; return; }
+  try{
+    st.textContent = 'Check your wallet to sign…';
+    const sig = await ethereum.request({ method: 'personal_sign', params: [GB_PREFIX + msg, gbAddr] });
+    st.textContent = 'Posting…';
+    const r = await fetch(API_BASE + '/guestbook', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address: gbAddr, message: msg, signature: sig })
+    });
+    if (r.status === 429){ st.textContent = 'One note per day per wallet — come back tomorrow!'; return; }
+    if (!r.ok) throw 0;
+    g('gbMsg').value = '';
+    st.textContent = 'Posted ✓';
+    loadGuestbook();
+  }catch(e){ st.textContent = 'Cancelled or failed'; }
+});
+
+/* ---- pageview tracking (skip owner + sekali per sesi) ---- */
+if (!localStorage.getItem('cms_token') && !sessionStorage.getItem('pv')){
+  sessionStorage.setItem('pv', '1');
+  fetch(API_BASE + '/track', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ t: 'page', ref: location.pathname })
+  }).catch(() => {});
+}
+
 /* ================= CMS / Edit Mode ================= */
 const CMS = (() => {
-  const API = 'https://api-portfolio.artnesh.cloud';
+  const API = API_BASE;
   let token = localStorage.getItem('cms_token') || '';
   let saved = {};   // content dari server
   let draft = {};   // perubahan yang belum di-save
@@ -769,13 +1338,6 @@ const CMS = (() => {
   applyDesign({}); // wire CTA + defaults sebelum cache/DB ke-apply
 
   /* ---- baca konten default dari DOM (fallback) ---- */
-  function readArticlesDom(){
-    return [...g('articlesList').querySelectorAll('.arow')].map(a => ({
-      t: a.querySelector('.at').textContent,
-      meta: a.querySelector('.ad').textContent,
-      href: a.getAttribute('href') || '#'
-    }));
-  }
   function readEventsDom(){
     return [...g('eventsList').querySelectorAll('.tli')].map(el => ({
       y: el.querySelector('.tly').textContent,
@@ -792,7 +1354,11 @@ const CMS = (() => {
     'me10h': norm(g('me10h').textContent), 'me10p': g('me10p').innerHTML,
     'bgh': norm(g('bgh').textContent), 'bgp': g('bgp').innerHTML,
     'careerP1': g('careerP1').innerHTML, 'careerP2': g('careerP2').innerHTML, 'careerP3': g('careerP3').innerHTML,
-    'articles': JSON.stringify(readArticlesDom()),
+    'resumeUrl': '',
+    'posts': JSON.stringify(POSTS),
+    'stack': JSON.stringify(STACK),
+    'photos': JSON.stringify(PHOTOS),
+    'contactP': g('contactP').innerHTML,
     'secDigitalP': g('secDigitalP').innerHTML, 'secNftP': g('secNftP').innerHTML, 'secCodeP': g('secCodeP').innerHTML,
     'works': JSON.stringify(WORKS),
     'events': JSON.stringify(readEventsDom()),
@@ -802,11 +1368,6 @@ const CMS = (() => {
   };
 
   /* ---- apply konten ke halaman ---- */
-  function renderArticles(arr){
-    g('articlesList').innerHTML = arr.map(a =>
-      `<a class="arow" href="${a.href || '#'}"><span class="at">${a.t}</span><span class="ad">${a.meta || ''}</span></a>`
-    ).join('');
-  }
   function renderEvents(arr){
     g('eventsList').innerHTML = arr.map(ev =>
       `<div class="tli${ev.now ? ' now' : ''}"><div class="tly">${ev.y}</div><div class="tlt">${ev.t}</div><div class="tld">${ev.d}</div></div>`
@@ -824,9 +1385,13 @@ const CMS = (() => {
         case 'secDigitalP': case 'secNftP': case 'secCodeP': case 'interP':
           g(k).innerHTML = v; break;
         case 'interCapT': case 'interCapP': g(k).textContent = v; break;
-        case 'articles': renderArticles(JSON.parse(v)); break;
+        case 'contactP': g('contactP').innerHTML = v; break;
         case 'events': renderEvents(JSON.parse(v)); break;
         case 'works': WORKS = JSON.parse(v); renderWorks(true); break;
+        case 'posts': POSTS = JSON.parse(v); renderPosts(); if (window.__cmdkReady) buildItems(); routePost(); break;
+        case 'stack': STACK = JSON.parse(v); renderStack(); break;
+        case 'photos': PHOTOS = JSON.parse(v); renderPhotos(); break;
+        case 'resumeUrl': { const a = g('resumeLink'); a.href = v || '#'; a.style.display = v ? '' : 'none'; break; }
         case 'design': applyDesign(JSON.parse(v)); break;
       }
     }catch(e){ console.warn('CMS apply fail', k, e); }
@@ -1052,16 +1617,29 @@ const CMS = (() => {
       f.appendChild(lbl('Isi 1')); f.appendChild(txt('me10p', { area: 1 }));
       f.appendChild(lbl('Judul 2')); f.appendChild(txt('bgh'));
       f.appendChild(lbl('Isi 2')); f.appendChild(txt('bgp', { area: 1 }));
+      f.appendChild(lbl('Stack / Tools (chips)'));
+      listSec(f, 'stack', [], 'New Tool', null);
     }));
     b.appendChild(sec('Career', f => {
       f.appendChild(lbl('Paragraf 1')); f.appendChild(txt('careerP1', { area: 1 }));
       f.appendChild(lbl('Paragraf 2')); f.appendChild(txt('careerP2', { area: 1 }));
       f.appendChild(lbl('Paragraf 3')); f.appendChild(txt('careerP3', { area: 1 }));
+      f.appendChild(lbl('Link resume (kosong = tombol disembunyikan)'));
+      f.appendChild(txt('resumeUrl'));
     }));
-    b.appendChild(sec('Articles', f => {
-      listSec(f, 'articles', [
-        { l: 'Judul', k: 't' }, { l: 'Meta (tahun · durasi)', k: 'meta' }, { l: 'Link', k: 'href' }
-      ], { t: 'Artikel baru', meta: '2026 · 5 min', href: '#' });
+    b.appendChild(sec('Blog / Articles', f => {
+      listSec(f, 'posts', [
+        { l: 'Judul', k: 't' },
+        { l: 'Slug (URL, tanpa spasi)', k: 'slug' },
+        { l: 'Meta (tahun · durasi)', k: 'meta' },
+        { l: 'Isi artikel (markdown: ## judul, **bold**, - list, > quote)', k: 'body', type: 'area' }
+      ], { slug: 'post-baru-' + Date.now(), t: 'Artikel baru', meta: '2026 · 5 min', body: 'Tulis di sini…' }, null, { collapse: 't' });
+    }));
+    b.appendChild(sec('Photos (polaroid)', f => {
+      listSec(f, 'photos', [
+        { l: 'Caption', k: 'cap' },
+        { l: 'Foto', k: 'img', type: 'img' }
+      ], { img: '', cap: 'new photo' }, null, { collapse: 'cap' });
     }));
     b.appendChild(sec('Works (semua card)', f => {
       f.appendChild(lbl('Intro Digital')); f.appendChild(txt('secDigitalP', { area: 1 }));
@@ -1087,6 +1665,64 @@ const CMS = (() => {
       f.appendChild(lbl('Intro')); f.appendChild(txt('interP', { area: 1 }));
       f.appendChild(lbl('Judul demo')); f.appendChild(txt('interCapT'));
       f.appendChild(lbl('Deskripsi demo')); f.appendChild(txt('interCapP', { area: 1 }));
+    }));
+    b.appendChild(sec('Contact & Inbox', f => {
+      f.appendChild(lbl('Intro contact (di halaman)'));
+      f.appendChild(txt('contactP', { area: 1 }));
+      f.appendChild(lbl('Pesan masuk'));
+      const box = document.createElement('div');
+      box.innerHTML = '<div class="cms-lbl">memuat…</div>';
+      f.appendChild(box);
+      fetch(API + '/contact', { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(list => {
+          if (!list.length){ box.innerHTML = '<div class="cms-lbl">belum ada pesan masuk</div>'; return; }
+          box.innerHTML = '';
+          list.forEach(m => {
+            const d = document.createElement('div');
+            d.className = 'cms-item';
+            const head = document.createElement('div');
+            head.className = 'cms-lbl';
+            head.style.marginTop = '0';
+            head.textContent = `${m.name || 'anon'} · ${m.email || '—'} · ${m.created_at.slice(0, 16).replace('T', ' ')}`;
+            const bodyEl = document.createElement('div');
+            bodyEl.style.cssText = 'font-size:13px;line-height:1.55';
+            bodyEl.textContent = m.message;
+            d.append(head, bodyEl);
+            box.appendChild(d);
+          });
+        })
+        .catch(() => { box.innerHTML = '<div class="cms-lbl">gagal memuat — backend perlu redeploy?</div>'; });
+    }));
+    b.appendChild(sec('Stats (views)', f => {
+      const box = document.createElement('div');
+      box.innerHTML = '<div class="cms-lbl">memuat…</div>';
+      f.appendChild(box);
+      fetch(API + '/stats', { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(s => {
+          box.innerHTML = '';
+          const mk = (label, val) => {
+            const d = document.createElement('div');
+            d.className = 'cms-chk';
+            d.innerHTML = `<span>${label}</span><span class="cms-rv" style="flex:0 0 auto">${val}</span>`;
+            box.appendChild(d);
+          };
+          mk('Total pageviews', s.page_total);
+          mk('Guestbook notes', s.guestbook_total);
+          mk('Pesan contact', s.contact_total);
+          if (s.per_work.length){
+            const h = document.createElement('div'); h.className = 'cms-lbl'; h.textContent = 'Views per project';
+            box.appendChild(h);
+            s.per_work.forEach(w => mk(w.ref, w.n));
+          }
+          if (s.per_day.length){
+            const h = document.createElement('div'); h.className = 'cms-lbl'; h.textContent = 'Pageviews 14 hari terakhir';
+            box.appendChild(h);
+            s.per_day.forEach(d2 => mk(d2.day, d2.n));
+          }
+        })
+        .catch(() => { box.innerHTML = '<div class="cms-lbl">gagal memuat — backend perlu redeploy?</div>'; });
     }));
   }
 
@@ -1162,6 +1798,7 @@ const CMS = (() => {
       return r.json();
     }).then(() => {
       Object.assign(saved, draft); draft = {};
+      try{ localStorage.setItem('cms_cache', JSON.stringify(saved)); }catch(e){}
       status('Saved ✓'); setTimeout(() => status(''), 2500);
     }).catch(() => status('Save gagal — cek koneksi'));
   }
