@@ -25,6 +25,10 @@
   --bg:#0f0f0f; --line:#262626; --text:#f2f2f2; --muted:#a1a1a1;
   --card:#ffffff; --dock:#161616; --dockline:#2b2b2b; --acc:#7dffcf; --col:720px;
   --mono:'JetBrains Mono',ui-monospace,monospace;
+  /* spacing tokens — diatur via Edit Mode > Design */
+  --sp-hero-top:96px; --sp-pfp-name:26px; --sp-name-role:4px; --sp-role-pill:22px;
+  --sp-section:56px; --sp-h2:14px; --sp-band:96px;
+  --bblur-px:9px; --bblur-h:110px;
 }
 :root[data-theme="light"]{
   --bg:#fafafa; --line:#e4e4e4; --text:#111111; --muted:#5c5c5c;
@@ -45,7 +49,7 @@ body{
 
 /* grain + bottom progressive blur */
 .grain{position:fixed;inset:0;z-index:80;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:280px}
-.bblur{position:fixed;left:0;right:0;bottom:0;height:110px;z-index:40;pointer-events:none;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);-webkit-mask-image:linear-gradient(transparent,#000 78%);mask-image:linear-gradient(transparent,#000 78%)}
+.bblur{position:fixed;left:0;right:0;bottom:0;height:var(--bblur-h);z-index:40;pointer-events:none;backdrop-filter:blur(var(--bblur-px));-webkit-backdrop-filter:blur(var(--bblur-px));-webkit-mask-image:linear-gradient(transparent,#000 78%);mask-image:linear-gradient(transparent,#000 78%)}
 
 /* band system */
 .band{display:grid;grid-template-columns:1fr min(var(--col),100%) 1fr}
@@ -53,7 +57,8 @@ body{
 .band.rule{border-top:1px solid var(--line)}
 .orn{position:relative;height:0}
 .orn .bl{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);background:var(--bg);padding:0 20px;font-size:26px;color:var(--text);line-height:1;transition:background .3s ease}
-.pad{padding-top:96px;padding-bottom:96px}
+.pad{padding-top:var(--sp-band);padding-bottom:var(--sp-band)}
+.hero>.cell.pad{padding-top:var(--sp-hero-top)}
 
 /* topbar */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:70;background:transparent;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
@@ -84,24 +89,24 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .hero{position:relative}
 .hero::before{content:'';position:absolute;top:-60px;left:0;right:0;bottom:0;background:radial-gradient(480px 300px at 18% 4%,rgba(125,255,207,.06),transparent 70%);pointer-events:none}
 .avatar{width:120px;height:120px;object-fit:cover;border:2px solid #fff;display:block;background:#1c1c1c}
-h1.name{font-size:40px;color:var(--text);margin:26px 0 4px;letter-spacing:.5px}
+h1.name{font-size:40px;color:var(--text);margin:var(--sp-pfp-name) 0 var(--sp-name-role);letter-spacing:.5px}
 .role{color:var(--muted);font-size:17px}
 .loopw{position:relative;display:inline-block;height:1.7em;overflow:hidden;vertical-align:bottom;min-width:13ch}
 .loopw b{position:absolute;left:0;top:0;white-space:nowrap;font-weight:500;color:var(--text);transform:translateY(115%);opacity:0;transition:transform .55s cubic-bezier(.3,1.2,.4,1),opacity .4s}
 .loopw b.cur{transform:none;opacity:1}
 .loopw b.out{transform:translateY(-115%);opacity:0}
-.pill{display:inline-flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:20px;padding:6px 15px;margin-top:22px;font-family:var(--mono);font-size:12.5px}
+.pill{display:inline-flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:20px;padding:6px 15px;margin-top:var(--sp-role-pill);font-family:var(--mono);font-size:12.5px}
 .pill .gd{width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc);animation:pulse 2s ease infinite}
 @keyframes pulse{50%{opacity:.4}}
 .shim{background:linear-gradient(90deg,var(--muted) 40%,var(--text) 50%,var(--muted) 60%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shim 2.6s linear infinite}
 @keyframes shim{to{background-position:-200% 0}}
 
 /* sections */
-section{margin-top:56px}
-section:first-of-type{margin-top:64px}
+section{margin-top:var(--sp-section)}
+section:first-of-type{margin-top:calc(var(--sp-section) + 8px)}
 .pad>section:first-child{margin-top:0}
-section h2{font-size:18px;font-weight:600;color:var(--text);margin-bottom:14px}
-section h2.bl{font-size:34px;font-weight:400;margin-bottom:16px}
+section h2{font-size:18px;font-weight:600;color:var(--text);margin-bottom:var(--sp-h2)}
+section h2.bl{font-size:34px;font-weight:400;margin-bottom:calc(var(--sp-h2) + 2px)}
 section p{color:var(--muted)}
 section p+p{margin-top:1.4em}
 section b,section strong{color:var(--text);font-weight:600}
@@ -162,6 +167,9 @@ section b,section strong{color:var(--text);font-weight:600}
 .dock .cta{width:auto;border-radius:28px;padding:0 22px;height:48px;background:#fff;color:#111;font-family:inherit;font-size:15px;font-weight:600;box-shadow:0 0 0 4px rgba(255,255,255,.08)}
 :root[data-theme="light"] .dock .cta{background:#111;color:#fff}
 .mag{transition:transform .25s cubic-bezier(.3,1.4,.4,1),background .15s}
+/* dock fixed mode: nempel full-width di bawah, kayak topbar versi bawah */
+.dock.fixed{bottom:0;left:0;right:0;transform:none;width:100%;border-radius:0;border-left:none;border-right:none;border-bottom:none;justify-content:center;padding:9px 7px;background:color-mix(in srgb,var(--dock) 82%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:none}
+@supports not (background:color-mix(in srgb,red 50%,transparent)){.dock.fixed{background:var(--dock)}}
 
 /* overlay: dialog + cmdk */
 .ovl{position:fixed;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:90;display:none;align-items:center;justify-content:center}
@@ -188,9 +196,13 @@ section b,section strong{color:var(--text);font-weight:600}
 @media (max-width:780px){
   :root{--col:100%}
   .band>.cell{padding-left:22px;padding-right:22px;border-left:none;border-right:none}
-  .pad{padding-top:56px;padding-bottom:56px}
+  .pad{padding-top:min(var(--sp-band),56px);padding-bottom:min(var(--sp-band),56px)}
+  .hero>.cell.pad{padding-top:min(var(--sp-hero-top),56px)}
   .tb-clock{font-size:12px}
-  .tb-icons button.kbtn{min-width:0}
+  .tb-icons button.kbtn{min-width:0;padding:6px 11px}
+  .kbtn .kb-kbd{display:none}
+  .tb-icons{gap:5px}
+  .dl-x{display:none}
   .grid{grid-template-columns:1fr}
   .demo-card{height:300px}
   .ovl{align-items:flex-end}
@@ -234,6 +246,10 @@ section b,section strong{color:var(--text);font-weight:600}
 .cms-add:hover{color:var(--text);border-color:var(--muted)}
 .cms-row{display:flex;gap:8px}
 .cms-row>*{flex:1}
+.cms-body input[type=range]{width:100%;accent-color:var(--acc);cursor:pointer;background:none;border:none;padding:0;height:24px}
+.cms-rv{flex:0 0 54px;font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center;text-align:right}
+.cms-chk{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;font-size:13px}
+.cms-chk input{width:auto;accent-color:var(--acc);cursor:pointer}
 .cms-drop{border:1.5px dashed var(--dockline);border-radius:10px;padding:10px;text-align:center;color:var(--muted);font-size:12px;cursor:pointer;margin-top:6px;transition:border-color .2s}
 .cms-drop.over{border-color:#7dffcf;color:#7dffcf}
 .cms-prev{width:100%;height:90px;border-radius:8px;background-size:cover;background-position:center;border:1px solid var(--line);margin-bottom:6px}
@@ -414,22 +430,22 @@ section b,section strong{color:var(--text);font-weight:600}
 
 </main>
 
-<div class="bblur"></div>
+<div class="bblur" id="bblur"></div>
 
-<footer class="dock">
-  <a href="#home" class="mag active" data-nav="home" title="Home">
+<footer class="dock" id="dock">
+  <a href="#home" class="mag active" data-nav="home" title="Home" id="dkHome">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
   </a>
-  <a href="#work" class="mag" data-nav="work" title="Work">
+  <a href="#work" class="mag" data-nav="work" title="Work" id="dkWork">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
   </a>
-  <a href="#interactions" class="mag" data-nav="interactions" title="Interactions">
+  <a href="#interactions" class="mag" data-nav="interactions" title="Interactions" id="dkInter">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15c3-8 5 4 8-4s3 6 5 2 2-2 5-1"/></svg>
   </a>
-  <a href="https://x.com/artnesh" target="_blank" rel="noopener" class="mag" title="X">
+  <a href="https://x.com/artnesh" target="_blank" rel="noopener" class="mag" title="X" id="dkX">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg>
   </a>
-  <button class="cta mag" onclick="location.href='mailto:artnesh06@gmail.com'">Work with me</button>
+  <button class="cta mag" id="dkCta">Work with me</button>
 </footer>
 
 <!-- work dialog -->
@@ -514,9 +530,9 @@ function tick(){
   const t = d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
   if (cols.length !== t.length) buildClock(t);
   [...t].forEach((ch,i)=>{ if (cols[i]) cols[i].style.transform = 'translateY(-' + (+ch * 1.35) + 'em)'; });
-  g('dateline').textContent =
-    d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) + ', ' +
-    d.toLocaleDateString('en-GB',{weekday:'long'}) + ' (GMT+7)';
+  g('dateline').innerHTML =
+    d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) +
+    '<span class="dl-x">, ' + d.toLocaleDateString('en-GB',{weekday:'long'}) + ' (GMT+7)</span>';
 }
 tick(); setInterval(tick, 1000);
 
@@ -718,6 +734,40 @@ const CMS = (() => {
   let draft = {};   // perubahan yang belum di-save
   const norm = s => (s || '').replace(/ /g, ' ');
 
+  /* ---- design settings: jarak, dock, blur ---- */
+  const DESIGN_DEF = {
+    spHeroTop:96, spPfpName:26, spNameRole:4, spRolePill:22, spSection:56, spH2:14, spBand:96,
+    dockShow:true, dockMode:'float', dockHome:true, dockWork:true, dockInter:true, dockX:true, dockCta:true,
+    ctaText:'Work with me', ctaLink:'mailto:artnesh06@gmail.com',
+    blurShow:true, blurPx:9, blurH:110
+  };
+  function applyDesign(d){
+    const D = { ...DESIGN_DEF, ...(d || {}) };
+    const rs = document.documentElement.style;
+    rs.setProperty('--sp-hero-top', D.spHeroTop + 'px');
+    rs.setProperty('--sp-pfp-name', D.spPfpName + 'px');
+    rs.setProperty('--sp-name-role', D.spNameRole + 'px');
+    rs.setProperty('--sp-role-pill', D.spRolePill + 'px');
+    rs.setProperty('--sp-section', D.spSection + 'px');
+    rs.setProperty('--sp-h2', D.spH2 + 'px');
+    rs.setProperty('--sp-band', D.spBand + 'px');
+    rs.setProperty('--bblur-px', D.blurPx + 'px');
+    rs.setProperty('--bblur-h', D.blurH + 'px');
+    const dock = g('dock');
+    dock.style.display = D.dockShow ? '' : 'none';
+    dock.classList.toggle('fixed', D.dockMode === 'fixed');
+    g('dkHome').style.display = D.dockHome ? '' : 'none';
+    g('dkWork').style.display = D.dockWork ? '' : 'none';
+    g('dkInter').style.display = D.dockInter ? '' : 'none';
+    g('dkX').style.display = D.dockX ? '' : 'none';
+    const cta = g('dkCta');
+    cta.style.display = D.dockCta ? '' : 'none';
+    cta.textContent = D.ctaText;
+    cta.onclick = () => { if (D.ctaLink) location.href = D.ctaLink; };
+    g('bblur').style.display = D.blurShow ? '' : 'none';
+  }
+  applyDesign({}); // wire CTA + defaults sebelum cache/DB ke-apply
+
   /* ---- baca konten default dari DOM (fallback) ---- */
   function readArticlesDom(){
     return [...g('articlesList').querySelectorAll('.arow')].map(a => ({
@@ -747,7 +797,8 @@ const CMS = (() => {
     'works': JSON.stringify(WORKS),
     'events': JSON.stringify(readEventsDom()),
     'interP': g('interP').innerHTML,
-    'interCapT': g('interCapT').textContent, 'interCapP': g('interCapP').textContent
+    'interCapT': g('interCapT').textContent, 'interCapP': g('interCapP').textContent,
+    'design': JSON.stringify(DESIGN_DEF)
   };
 
   /* ---- apply konten ke halaman ---- */
@@ -776,6 +827,7 @@ const CMS = (() => {
         case 'articles': renderArticles(JSON.parse(v)); break;
         case 'events': renderEvents(JSON.parse(v)); break;
         case 'works': WORKS = JSON.parse(v); renderWorks(true); break;
+        case 'design': applyDesign(JSON.parse(v)); break;
       }
     }catch(e){ console.warn('CMS apply fail', k, e); }
   }
@@ -935,6 +987,58 @@ const CMS = (() => {
 
   function buildBody(){
     const b = g('cmsBody'); b.innerHTML = '';
+    b.appendChild(sec('Design — jarak, dock, blur', f => {
+      const gd = () => { let o = {}; try{ o = JSON.parse(cur('design')) || {}; }catch(e){} return { ...DESIGN_DEF, ...o }; };
+      const sd = (k, v) => { const d = gd(); d[k] = v; set('design', JSON.stringify(d)); };
+      const rng = (label, k, min, max) => {
+        f.appendChild(lbl(label));
+        const row = document.createElement('div'); row.className = 'cms-row';
+        const r = document.createElement('input'); r.type = 'range'; r.min = min; r.max = max; r.value = gd()[k];
+        const val = document.createElement('span'); val.className = 'cms-rv'; val.textContent = gd()[k] + 'px';
+        r.addEventListener('input', () => { val.textContent = r.value + 'px'; sd(k, +r.value); });
+        row.append(r, val); f.appendChild(row);
+      };
+      const chk = (label, k) => {
+        const w = document.createElement('label'); w.className = 'cms-chk';
+        const s = document.createElement('span'); s.textContent = label;
+        const c = document.createElement('input'); c.type = 'checkbox'; c.checked = !!gd()[k];
+        c.addEventListener('change', () => sd(k, c.checked));
+        w.append(s, c); f.appendChild(w);
+      };
+      f.appendChild(lbl('· · ·  JARAK / SPACING  · · ·'));
+      rng('Header → PFP', 'spHeroTop', 40, 200);
+      rng('PFP → Nama', 'spPfpName', 0, 80);
+      rng('Nama → Role', 'spNameRole', 0, 40);
+      rng('Role → Pill status', 'spRolePill', 0, 60);
+      rng('Antar section', 'spSection', 20, 120);
+      rng('Judul → Isi', 'spH2', 0, 40);
+      rng('Padding blok atas-bawah', 'spBand', 40, 160);
+      f.appendChild(lbl('· · ·  DOCK (MENU BAWAH)  · · ·'));
+      chk('Tampilkan dock', 'dockShow');
+      f.appendChild(lbl('Mode dock'));
+      const sl = document.createElement('select');
+      [['float','Floating — curve ngambang'],['fixed','Fixed — nempel bawah full']].forEach(o => {
+        const op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; sl.appendChild(op);
+      });
+      sl.value = gd().dockMode;
+      sl.addEventListener('change', () => sd('dockMode', sl.value));
+      f.appendChild(sl);
+      chk('Icon Home', 'dockHome');
+      chk('Icon Work', 'dockWork');
+      chk('Icon Interactions', 'dockInter');
+      chk('Icon X / Twitter', 'dockX');
+      chk('Tombol CTA', 'dockCta');
+      f.appendChild(lbl('Teks tombol CTA'));
+      const t1 = document.createElement('input'); t1.type = 'text'; t1.value = gd().ctaText;
+      t1.addEventListener('input', () => sd('ctaText', t1.value)); f.appendChild(t1);
+      f.appendChild(lbl('Link tombol CTA'));
+      const t2 = document.createElement('input'); t2.type = 'text'; t2.value = gd().ctaLink;
+      t2.addEventListener('input', () => sd('ctaLink', t2.value)); f.appendChild(t2);
+      f.appendChild(lbl('· · ·  BLUR BAWAH LAYAR  · · ·'));
+      chk('Tampilkan blur', 'blurShow');
+      rng('Ketebalan blur', 'blurPx', 0, 30);
+      rng('Tinggi area blur', 'blurH', 40, 300);
+    }));
     b.appendChild(sec('Profile', f => {
       f.appendChild(lbl('Foto profil (PFP)'));
       f.appendChild(imgField(cur('pfp'), 320, uri => set('pfp', uri)));
