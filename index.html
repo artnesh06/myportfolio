@@ -591,15 +591,23 @@ if (hoverable && !reduced){
 
 /* ---- morphing dialog / drawer ---- */
 const ovl = g('ovl'), sheet = g('sheet');
+const CHAINS = {
+  ETH: { name: 'Ethereum', market: 'opensea', url: 'https://opensea.io/collection/' },
+  MegaETH: { name: 'MegaETH', market: 'opensea', url: 'https://opensea.io/collection/' },
+  BASE: { name: 'BASE', market: 'opensea', url: 'https://opensea.io/collection/' },
+  Cosmos: { name: 'Cosmos', market: 'stargaze', url: 'https://stargaze.zone/m/' },
+  STARS: { name: 'Cosmos', market: 'stargaze', url: 'https://stargaze.zone/m/' }
+};
 function marketLink(w){
-  if (!w.ca) return null;
-  return w.chain === 'STARS'
-    ? { u: `https://www.stargaze.zone/m/${w.ca}/tokens`, l: 'View on Stargaze' }
-    : { u: `https://opensea.io/assets/ethereum/${w.ca}`, l: 'View on OpenSea' };
+  if (!w.ca || !w.chain) return null;
+  const ch = CHAINS[w.chain];
+  if (!ch) return null;
+  const label = ch.market === 'stargaze' ? 'View on Stargaze' : 'View on OpenSea';
+  return { u: ch.url + w.ca, l: label };
 }
 function openWork(w, fromEl){
   const mkt = marketLink(w);
-  const chainLabel = {ETH:'Ethereum',STARS:'Cosmos'}[w.chain] || '';
+  const chainLabel = CHAINS[w.chain]?.name || '';
   sheet.innerHTML = `<div class="grab"></div>
     <div class="sthumb thumb" style="${thumbBg(w)}"></div>
     <h3>${w.t}</h3><div class="cm">${w.m}</div>
@@ -961,7 +969,7 @@ const CMS = (() => {
         { l: 'Kategori', k: 'cat', type: 'select', opts: [['Digital','Digital'],['NFT','NFT'],['Vibe Code','Vibe Code']] },
         { l: 'Meta', k: 'm' }, { l: 'Chip (mis. ETH / STARS)', k: 'chip' },
         { l: 'Deskripsi', k: 'd', type: 'area' }, { l: 'Link project', k: 'link' },
-        { l: 'Chain NFT', k: 'chain', type: 'select', opts: [['','— none —'],['ETH','Ethereum (OpenSea)'],['STARS','Stargaze (Cosmos)']] },
+        { l: 'Chain NFT', k: 'chain', type: 'select', opts: [['','— none —'],['ETH','Ethereum (OpenSea)'],['MegaETH','MegaETH (OpenSea)'],['BASE','BASE (OpenSea)'],['Cosmos','Cosmos (Stargaze)']] },
         { l: 'Contract address (CA)', k: 'ca' },
         { l: 'Stats (mis: 999 Supply, 999 Minted)', k: 'stats', get: statsGet, setV: statsSet }
       ], { id: 'new' + Date.now(), cat: 'Digital', t: 'Project baru', m: 'META', d: 'Deskripsi…', g: 'linear-gradient(150deg,#233047,#7dffcf22,#141a26)' }, null, { collapse: 't' });
