@@ -752,10 +752,10 @@ const CMS = (() => {
     try{
       switch(k){
         case 'pfp': g('pfpImg').src = v; break;
-        case 'hero.name': { const el = g('heroName'); el.textContent = v; split(el); el.classList.add('in'); break; }
+        case 'hero.name': { const el = g('heroName'); const had = el.classList.contains('in'); el.textContent = v; split(el); if (had) el.classList.add('in'); break; }
         case 'roles': ROLES = JSON.parse(v); renderRoles(); break;
         case 'hero.pill': g('pillTxt').textContent = v; break;
-        case 'me10h': case 'bgh': { const el = g(k); el.textContent = v; split(el); el.classList.add('in'); break; }
+        case 'me10h': case 'bgh': { const el = g(k); const had = el.classList.contains('in'); el.textContent = v; split(el); if (had) el.classList.add('in'); break; }
         case 'me10p': case 'bgp': case 'careerP1': case 'careerP2': case 'careerP3':
         case 'secDigitalP': case 'secNftP': case 'secCodeP': case 'interP':
           g(k).innerHTML = v; break;
@@ -769,10 +769,16 @@ const CMS = (() => {
   const cur = k => (k in draft) ? draft[k] : (k in saved) ? saved[k] : DEF[k];
   function set(k, v){ draft[k] = v; applyKey(k, v); status('Unsaved changes'); }
 
-  /* ---- load konten dari API (public) ---- */
-  fetch(API + '/content').then(r => r.ok ? r.json() : {}).then(d => {
-    saved = d || {};
+  /* ---- apply cache dulu (instant, tanpa kedip), lalu sync dari API ---- */
+  try{
+    saved = JSON.parse(localStorage.getItem('cms_cache') || '{}') || {};
     Object.entries(saved).forEach(([k, v]) => applyKey(k, v));
+  }catch(e){ saved = {}; }
+  fetch(API + '/content').then(r => r.ok ? r.json() : {}).then(d => {
+    const fresh = d || {};
+    Object.entries(fresh).forEach(([k, v]) => { if (saved[k] !== v) applyKey(k, v); });
+    saved = fresh;
+    try{ localStorage.setItem('cms_cache', JSON.stringify(fresh)); }catch(e){}
   }).catch(() => {});
 
   /* ---- image helper: file → resized data URI ---- */
