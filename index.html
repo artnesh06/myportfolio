@@ -26,9 +26,11 @@
   --card:#ffffff; --dock:#161616; --dockline:#2b2b2b; --acc:#7dffcf; --col:720px;
   --mono:'JetBrains Mono',ui-monospace,monospace;
   /* spacing tokens — diatur via Edit Mode > Design */
-  --sp-hero-top:96px; --sp-pfp-name:26px; --sp-name-role:4px; --sp-role-pill:22px;
-  --sp-section:56px; --sp-h2:14px; --sp-band:96px;
+  --sp-hero-top:50px; --sp-pfp-name:19px; --sp-name-role:0px; --sp-role-pill:21px;
+  --sp-section:23px; --sp-h2:12px; --sp-band:66px;
   --bblur-px:9px; --bblur-h:110px;
+  --font-body:'Inter',-apple-system,'Segoe UI',sans-serif;
+  --font-disp:'UnifrakturMaguntia',serif;
 }
 :root[data-theme="light"]{
   --bg:#fafafa; --line:#e4e4e4; --text:#111111; --muted:#5c5c5c;
@@ -39,12 +41,12 @@ html{scroll-behavior:smooth}
 body{
   margin:0;
   background:var(--bg); color:var(--text);
-  font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+  font-family:var(--font-body);
   font-size:16.5px; line-height:1.75;
   -webkit-font-smoothing:antialiased;
   transition:background .3s ease,color .3s ease;
 }
-.bl{font-family:'UnifrakturMaguntia',serif;font-weight:400}
+.bl{font-family:var(--font-disp);font-weight:400}
 .mono{font-family:var(--mono)}
 
 /* grain + bottom progressive blur */
@@ -193,6 +195,13 @@ section b,section strong{color:var(--text);font-weight:600}
 .ci:hover,.ci.sel{background:rgba(128,128,128,.13)}
 .ci .cc{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
 
+/* section manager on-page (muncul pas edit mode) */
+[data-sec]{position:relative}
+.sec-ctl{position:absolute;top:10px;right:12px;z-index:60;display:flex;gap:4px;align-items:center;background:rgba(15,15,15,.85);border:1px solid var(--dockline);border-radius:9px;padding:4px 6px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.sec-ctl .sc-name{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:#7dffcf;margin-right:4px}
+.sec-ctl button{background:none;border:1px solid var(--dockline);color:var(--muted);border-radius:6px;width:22px;height:22px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.sec-ctl button:hover{color:var(--text);border-color:var(--muted)}
+
 /* nft carousel di sheet */
 .sthumb .nftc{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s ease}
 .sthumb .nftc.on{opacity:1}
@@ -270,6 +279,20 @@ section b,section strong{color:var(--text);font-weight:600}
 .pv-body hr{border:none;border-top:1px solid var(--line);margin:2.2em 0}
 .pv-body a{color:var(--text);text-decoration:underline;text-underline-offset:3px}
 .pv-body code{font-family:var(--mono);font-size:13.5px;background:rgba(128,128,128,.12);border-radius:5px;padding:1px 6px}
+
+/* ai chat */
+.ai-box{display:flex;flex-direction:column}
+.ai-head{display:flex;align-items:baseline;gap:10px;padding:15px 18px;border-bottom:1px solid var(--dockline)}
+.ai-head .ttl{font-weight:600;font-size:14.5px}
+.ai-head .sub{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.ai-msgs{overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-height:160px;max-height:46vh}
+.ai-m{max-width:86%;padding:9px 13px;border-radius:13px;font-size:14px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
+.ai-m.u{align-self:flex-end;background:var(--text);color:var(--bg);border-bottom-right-radius:4px}
+.ai-m.a{align-self:flex-start;background:rgba(128,128,128,.12);color:var(--text);border-bottom-left-radius:4px}
+.ai-m.t{align-self:flex-start;color:var(--muted);font-family:var(--mono);font-size:11px;background:none;padding:2px 4px;animation:pulse 1.2s ease infinite}
+.ai-row{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--dockline)}
+.ai-row input{flex:1;background:rgba(128,128,128,.08);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 13px;font:inherit;font-size:14px;outline:none}
+.ai-row input:focus{border-color:var(--muted)}
 
 /* toast */
 .toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,16px);z-index:97;background:var(--text);color:var(--bg);font-size:12px;padding:9px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
@@ -383,7 +406,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <main>
 
-<div class="band hero" id="home">
+<div class="band hero" id="home" data-sec="hero">
   <div class="cell pad">
     <img class="avatar" id="pfpImg" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIj48cmVjdCB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzFjMWMxYyIvPjxjaXJjbGUgY3g9IjYwIiBjeT0iNDYiIHI9IjIwIiBmaWxsPSIjM2EzYTNhIi8+PHBhdGggZD0iTTIyIDExMmMwLTIyIDE3LTM0IDM4LTM0czM4IDEyIDM4IDM0IiBmaWxsPSIjM2EzYTNhIi8+PC9zdmc+" alt="Anesh">
     <h1 class="name bl" id="heroName">anesh</h1>
@@ -410,7 +433,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band">
+<div class="band" data-sec="career">
   <div class="cell pad">
     <section>
       <h2>Career</h2>
@@ -426,7 +449,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band" id="work">
+<div class="band" id="work" data-sec="articles">
   <div class="cell pad">
     <section>
       <div class="eyebrow">Writing</div>
@@ -438,7 +461,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band">
+<div class="band" data-sec="digital">
   <div class="cell pad">
     <section>
       <div class="eyebrow">Visual</div>
@@ -451,7 +474,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band">
+<div class="band" data-sec="nft">
   <div class="cell pad">
     <section>
       <div class="eyebrow">On-chain</div>
@@ -464,7 +487,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band">
+<div class="band" data-sec="code">
   <div class="cell pad">
     <section>
       <div class="eyebrow">Shipped with AI</div>
@@ -477,7 +500,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band">
+<div class="band" data-sec="events">
   <div class="cell pad">
     <section>
       <div class="eyebrow">Offline</div>
@@ -493,7 +516,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band" id="interactions">
+<div class="band" id="interactions" data-sec="interactions">
   <div class="cell pad">
     <section>
       <h2 class="bl">Interactions</h2>
@@ -536,7 +559,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band" id="contact">
+<div class="band" id="contact" data-sec="contact">
   <div class="cell pad">
     <section>
       <div class="eyebrow">Contact</div>
@@ -581,7 +604,7 @@ section b,section strong{color:var(--text);font-weight:600}
 
 <div class="band rule"><div class="cell orn"><span class="bl">a</span></div></div>
 
-<div class="band">
+<div class="band" data-sec="photos">
   <div class="cell photos-grid" id="photosGrid"></div>
 </div>
 
@@ -604,18 +627,19 @@ section b,section strong{color:var(--text);font-weight:600}
 <div class="bblur" id="bblur"></div>
 
 <footer class="dock" id="dock">
-  <a href="#home" class="mag active" data-nav="home" title="Home" id="dkHome">
+  <a href="/" class="mag active" data-nav="home" title="Home" id="dkHome">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
   </a>
-  <a href="#work" class="mag" data-nav="work" title="Work" id="dkWork">
+  <a href="/work" class="mag" data-nav="work" title="Work" id="dkWork">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
   </a>
-  <a href="#interactions" class="mag" data-nav="interactions" title="Interactions" id="dkInter">
+  <a href="/interactions" class="mag" data-nav="interactions" title="Interactions" id="dkInter">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15c3-8 5 4 8-4s3 6 5 2 2-2 5-1"/></svg>
   </a>
-  <a href="https://x.com/artnesh" target="_blank" rel="noopener" class="mag" title="X" id="dkX">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg>
-  </a>
+  <span id="dkSocials" style="display:contents"></span>
+  <button class="mag" id="dkAi" title="Ask AI" style="display:none">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg>
+  </button>
   <button class="cta mag" id="dkCta">Work with me</button>
 </footer>
 
@@ -629,6 +653,21 @@ section b,section strong{color:var(--text);font-weight:600}
   <div class="cbox">
     <input id="cin" placeholder="Search work, articles, sections…" autocomplete="off">
     <div id="clist"></div>
+  </div>
+</div>
+
+<!-- AI assistant -->
+<div class="ovl" id="aiOvl">
+  <div class="cbox ai-box">
+    <div class="ai-head">
+      <span class="ttl">✦ Ask AI</span>
+      <span class="sub">about Anesh &amp; his work</span>
+    </div>
+    <div class="ai-msgs" id="aiMsgs"></div>
+    <div class="ai-row">
+      <input id="aiIn" placeholder="Ask anything…" maxlength="500" autocomplete="off">
+      <button id="aiSend" class="cf-send" type="button" style="flex:0 0 auto">Send</button>
+    </div>
   </div>
 </div>
 
@@ -698,12 +737,14 @@ function buildClock(str){
 }
 function tick(){
   const d = new Date();
-  const t = d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  // selalu jam Jakarta (GMT+7) — visitor dari negara manapun liat jam yang sama
+  const TZ = { timeZone: 'Asia/Jakarta' };
+  const t = d.toLocaleTimeString('en-GB',{...TZ,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
   if (cols.length !== t.length) buildClock(t);
   [...t].forEach((ch,i)=>{ if (cols[i]) cols[i].style.transform = 'translateY(-' + (+ch * 1.35) + 'em)'; });
   g('dateline').innerHTML =
-    d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) +
-    '<span class="dl-x">, ' + d.toLocaleDateString('en-GB',{weekday:'long'}) + ' (GMT+7)</span>';
+    d.toLocaleDateString('en-GB',{...TZ,day:'numeric',month:'long',year:'numeric'}) +
+    '<span class="dl-x">, ' + d.toLocaleDateString('en-GB',{...TZ,weekday:'long'}) + ' (GMT+7)</span>';
 }
 tick(); setInterval(tick, 1000);
 
@@ -878,7 +919,7 @@ The tools finally caught up to the ambition. If you can hold design taste and sy
 
 function renderPosts(){
   g('articlesList').innerHTML = POSTS.map(p =>
-    `<a class="arow" href="#post/${p.slug}"><span class="at">${p.t}</span><span class="ad">${p.meta || ''}</span></a>`
+    `<a class="arow" href="/post/${p.slug}"><span class="at">${p.t}</span><span class="ad">${p.meta || ''}</span></a>`
   ).join('');
 }
 renderPosts();
@@ -909,23 +950,49 @@ function mdToHtml(md){
   return html;
 }
 
-/* ---- blog router (#post/slug) ---- */
-function routePost(){
-  const pv = g('postview');
-  const m = location.hash.match(/^#post\/(.+)$/);
-  if (!m){ pv.classList.remove('show'); document.body.style.overflow = ''; return; }
-  const post = POSTS.find(p => p.slug === decodeURIComponent(m[1]));
-  if (!post){ pv.classList.remove('show'); document.body.style.overflow = ''; return; }
-  g('pvMeta').textContent = post.meta || '';
-  g('pvTitle').textContent = post.t;
-  g('pvBody').innerHTML = mdToHtml(post.body || '');
-  pv.classList.add('show');
-  pv.scrollTop = 0;
-  document.body.style.overflow = 'hidden';
+/* ---- clean URL router (tanpa hash: /work, /post/slug, dst) ---- */
+const NAV_PATHS = { '/': 'home', '/work': 'work', '/interactions': 'interactions', '/contact': 'contact' };
+function navTo(path, scroll = true){
+  if (location.pathname !== path) history.pushState({}, '', path);
+  routeAll(scroll);
 }
-g('pvBack').addEventListener('click', () => { location.hash = '#work'; });
-addEventListener('hashchange', routePost);
-routePost();
+function routeAll(scroll = true){
+  const pv = g('postview');
+  const m = location.pathname.match(/^\/post\/(.+)$/);
+  const post = m && POSTS.find(p => p.slug === decodeURIComponent(m[1]));
+  if (post){
+    g('pvMeta').textContent = post.meta || '';
+    g('pvTitle').textContent = post.t;
+    g('pvBody').innerHTML = mdToHtml(post.body || '');
+    pv.classList.add('show');
+    pv.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    return;
+  }
+  pv.classList.remove('show');
+  document.body.style.overflow = '';
+  const sec = NAV_PATHS[location.pathname];
+  if (scroll && sec){
+    if (sec === 'home') scrollTo({ top: 0, behavior: 'smooth' });
+    else g(sec) && g(sec).scrollIntoView({ behavior: 'smooth' });
+  }
+}
+g('pvBack').addEventListener('click', () => navTo('/work'));
+addEventListener('popstate', () => routeAll(true));
+// legacy #hash lama → redirect ke clean URL
+if (location.hash){
+  const h = location.hash.slice(1);
+  const legacy = h.startsWith('post/') ? '/' + h : (NAV_PATHS['/' + h] ? '/' + h : null);
+  history.replaceState({}, '', legacy || location.pathname);
+}
+routeAll(location.pathname !== '/');
+// intercept link internal biar gak full reload
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[data-nav], #articlesList a');
+  if (!a) return;
+  const href = a.getAttribute('href') || '';
+  if (href.startsWith('/')){ e.preventDefault(); navTo(href); }
+});
 
 let ROLES = ['Graphic Designer','NFT Artist','Vibe Coder','Event Runner'];
 const loop = g('loop');
@@ -933,8 +1000,13 @@ let li = 0;
 function renderRoles(){
   loop.innerHTML = ''; li = 0;
   ROLES.forEach((r,i)=>{ const b = document.createElement('b'); b.textContent = r; if(!i) b.className='cur'; loop.appendChild(b); });
+  // lebar ngikutin role terpanjang biar gak kepotong
+  let mw = 0;
+  loop.querySelectorAll('b').forEach(b=>{ mw = Math.max(mw, b.offsetWidth); });
+  if (mw) loop.style.minWidth = (mw + 4) + 'px';
 }
 renderRoles();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderRoles);
 setInterval(()=>{
   const ws = loop.children;
   if (ws.length < 2) return;
@@ -972,9 +1044,11 @@ function bindTilt(){
   });
 }
 bindTilt();
-if (hoverable && !reduced){
-  /* magnetic */
-  document.querySelectorAll('.mag').forEach(el=>{
+function bindMag(scope){
+  if (!(hoverable && !reduced)) return;
+  scope.querySelectorAll('.mag').forEach(el=>{
+    if (el.dataset.magB) return;
+    el.dataset.magB = '1';
     el.addEventListener('mousemove',e=>{
       const r = el.getBoundingClientRect();
       el.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.32}px,${(e.clientY-r.top-r.height/2)*.32}px)`;
@@ -982,6 +1056,16 @@ if (hoverable && !reduced){
     el.addEventListener('mouseleave',()=>el.style.transform='');
   });
 }
+bindMag(document);
+const SOCIAL_ICONS = {
+  x: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg>',
+  instagram: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.2" fill="currentColor" stroke="none"/></svg>',
+  youtube: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.8-.5-5.6a2.9 2.9 0 0 0-2-2C18.6 4 12 4 12 4s-6.6 0-8.5.4a2.9 2.9 0 0 0-2 2C1 8.2 1 12 1 12s0 3.8.5 5.6a2.9 2.9 0 0 0 2 2c1.9.4 8.5.4 8.5.4s6.6 0 8.5-.4a2.9 2.9 0 0 0 2-2C23 15.8 23 12 23 12zM9.8 15.5v-7l6.2 3.5-6.2 3.5z"/></svg>',
+  tiktok: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 7.3a5.4 5.4 0 0 1-3.1-1v6.9a5.9 5.9 0 1 1-5.9-5.9c.3 0 .6 0 .9.1v3a2.9 2.9 0 1 0 2 2.8V2h3a5.4 5.4 0 0 0 3.1 4.3v3z"/></svg>',
+  github: '<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>',
+  discord: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.2a18 18 0 0 0-5.6 0L8.6 3a19.8 19.8 0 0 0-4.9 1.5A20.3 20.3 0 0 0 .2 18.1a19.9 19.9 0 0 0 6 3l1.3-2.1a12.8 12.8 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12 0l.5.4a12.8 12.8 0 0 1-2 1l1.3 2.1a19.9 19.9 0 0 0 6-3A20.3 20.3 0 0 0 20.3 4.4zM8.5 15.3c-1.2 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-1 2.3-2.1 2.3zm7 0c-1.2 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-.9 2.3-2.1 2.3z"/></svg>',
+  telegram: '<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.4L1.7 11.2c-1 .4-1 1.5.1 1.8l5.1 1.6 2 6.3c.3.9 1.3 1 1.9.3l2.8-3.4 5.3 3.9c.7.5 1.7.1 1.9-.8l3-16c.2-1-.8-1.9-1.9-1.5zM8.6 14.5l9.9-6.6c.4-.2.7.2.4.5l-8 7.4-.3 3.7-2-5z"/></svg>'
+};
 
 /* ---- morphing dialog / drawer ---- */
 const ovl = g('ovl'), sheet = g('sheet');
@@ -1059,7 +1143,7 @@ function openWork(w, fromEl){
     sheet.style.transition = ''; sheet.style.transform = ''; sheet.style.opacity = '';
   }));
 }
-function closeOvl(){ ovl.classList.remove('show'); cmdk.classList.remove('show'); }
+function closeOvl(){ ovl.classList.remove('show'); cmdk.classList.remove('show'); const a = g('aiOvl'); if (a) a.classList.remove('show'); }
 ovl.addEventListener('click', e=>{ if (e.target === ovl) closeOvl(); });
 
 /* ---- command palette ---- */
@@ -1068,14 +1152,15 @@ let ITEMS = [];
 function buildItems(){
   ITEMS = [
     ...WORKS.map(w=>({t:w.t, c:w.cat, run:()=>{ closeOvl(); openWork(w, document.body); }})),
-    ...POSTS.map(p=>({t:'Read: ' + p.t, c:'Blog', run:()=>{ closeOvl(); location.hash='#post/' + p.slug; }})),
-    {t:'Go to Home', c:'Nav', run:()=>{ closeOvl(); location.hash='#home'; }},
-    {t:'Go to Work', c:'Nav', run:()=>{ closeOvl(); location.hash='#work'; }},
-    {t:'Go to Interactions', c:'Nav', run:()=>{ closeOvl(); location.hash='#interactions'; }},
-    {t:'Go to Contact', c:'Nav', run:()=>{ closeOvl(); location.hash='#contact'; }},
+    ...POSTS.map(p=>({t:'Read: ' + p.t, c:'Blog', run:()=>{ closeOvl(); navTo('/post/' + p.slug); }})),
+    {t:'Go to Home', c:'Nav', run:()=>{ closeOvl(); navTo('/'); }},
+    {t:'Go to Work', c:'Nav', run:()=>{ closeOvl(); navTo('/work'); }},
+    {t:'Go to Interactions', c:'Nav', run:()=>{ closeOvl(); navTo('/interactions'); }},
+    {t:'Go to Contact', c:'Nav', run:()=>{ closeOvl(); navTo('/contact'); }},
     {t:'Copy email', c:'Contact', run:()=>{ closeOvl(); copyEmail(); }},
     {t:'Work with me — email', c:'Contact', run:()=>location.href='mailto:artnesh06@gmail.com'},
     {t:'X / Twitter — @artnesh', c:'Contact', run:()=>open('https://x.com/artnesh')},
+    ...(window.__aiEnabled ? [{t:'Ask AI ✦', c:'AI', run:()=>{ openAi(); }}] : []),
     {t:'Edit Mode', c:'Owner', run:()=>{ closeOvl(); CMS.open(); }}
   ];
   filtered = ITEMS;
@@ -1286,6 +1371,60 @@ g('gbPost').addEventListener('click', async () => {
   }catch(e){ st.textContent = 'Cancelled or failed'; }
 });
 
+/* ---- AI assistant ---- */
+const aiOvl = g('aiOvl'), aiMsgs = g('aiMsgs'), aiIn = g('aiIn');
+let AI_HIST = [];
+function aiRender(role, text){
+  const d = document.createElement('div');
+  d.className = 'ai-m ' + role;
+  d.textContent = text;
+  aiMsgs.appendChild(d);
+  aiMsgs.scrollTop = aiMsgs.scrollHeight;
+  return d;
+}
+function openAi(){
+  closeOvl();
+  aiOvl.classList.add('show');
+  if (!aiMsgs.children.length) aiRender('a', "Hey! Gue AI assistant-nya Anesh. Tanya apa aja soal Anesh, project-nya, atau NFT collection-nya 👋");
+  setTimeout(() => aiIn.focus(), 60);
+}
+async function aiSend(){
+  const q = aiIn.value.trim();
+  if (!q) return;
+  aiIn.value = '';
+  aiRender('u', q);
+  AI_HIST.push({ role: 'user', content: q });
+  const tEl = aiRender('t', 'thinking…');
+  try{
+    const r = await fetch(API_BASE + '/ai', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: AI_HIST.slice(-8) })
+    });
+    tEl.remove();
+    if (r.status === 429){ aiRender('a', 'Sabar dulu ya — kebanyakan pesan dalam sejam. Coba lagi nanti 🙏'); return; }
+    if (!r.ok) throw 0;
+    const d = await r.json();
+    AI_HIST.push({ role: 'assistant', content: d.reply });
+    aiRender('a', d.reply);
+  }catch(e){
+    tEl.remove();
+    aiRender('a', 'Lagi error nih — coba lagi bentar ya.');
+  }
+}
+g('aiSend').addEventListener('click', aiSend);
+aiIn.addEventListener('keydown', e => { if (e.key === 'Enter') aiSend(); });
+g('dkAi').addEventListener('click', openAi);
+aiOvl.addEventListener('click', e => { if (e.target === aiOvl) aiOvl.classList.remove('show'); });
+// tampilkan tombol AI kalau backend punya key + design gak matiin
+fetch(API_BASE + '/ai').then(r => r.ok ? r.json() : { enabled: false }).then(d => {
+  if (d.enabled){
+    window.__aiEnabled = true;
+    const b = g('dkAi');
+    if (b.dataset.on !== '0') b.style.display = '';
+    if (window.__cmdkReady) buildItems();
+  }
+}).catch(() => {});
+
 /* ---- pageview tracking (skip owner + sekali per sesi) ---- */
 if (!localStorage.getItem('cms_token') && !sessionStorage.getItem('pv')){
   sessionStorage.setItem('pv', '1');
@@ -1305,11 +1444,60 @@ const CMS = (() => {
 
   /* ---- design settings: jarak, dock, blur ---- */
   const DESIGN_DEF = {
-    spHeroTop:96, spPfpName:26, spNameRole:4, spRolePill:22, spSection:56, spH2:14, spBand:96,
-    dockShow:true, dockMode:'float', dockHome:true, dockWork:true, dockInter:true, dockX:true, dockCta:true,
+    spHeroTop:50, spPfpName:19, spNameRole:0, spRolePill:21, spSection:23, spH2:12, spBand:66,
+    dockShow:true, dockMode:'float', dockHome:true, dockWork:true, dockInter:true, dockCta:true, dockAi:true,
     ctaText:'Work with me', ctaLink:'mailto:artnesh06@gmail.com',
-    blurShow:true, blurPx:9, blurH:110
+    socials: [{ t:'x', url:'https://x.com/artnesh' }],
+    blurShow:true, blurPx:9, blurH:110,
+    fontBody:'', fontMono:'', fontDisp:'',
+    sections: null
   };
+  const SEC_LABELS = { hero:'Hero', career:'Career', articles:'Articles', digital:'Digital Works', nft:'NFT Collections', code:'Vibe Code', events:'Events', interactions:'Interactions', contact:'Contact & Guestbook', photos:'Photos' };
+  const secList = d => (d.sections && d.sections.length ? d.sections : Object.keys(SEC_LABELS).map(id => ({ id, on: true })));
+  function applySections(list){
+    const main = document.querySelector('main');
+    const bands = {};
+    main.querySelectorAll('[data-sec]').forEach(b => bands[b.dataset.sec] = b);
+    const order = (list && list.length ? list : Object.keys(SEC_LABELS).map(id => ({ id, on: true }))).filter(x => bands[x.id]);
+    Object.keys(bands).forEach(id => { if (!order.some(x => x.id === id)) order.push({ id, on: true }); });
+    main.querySelectorAll('.band.rule').forEach(r => r.remove());
+    let prevShown = false;
+    order.forEach(x => {
+      const b = bands[x.id];
+      b.style.display = x.on === false ? 'none' : '';
+      if (x.on !== false && prevShown){
+        const d = document.createElement('div');
+        d.className = 'band rule';
+        d.innerHTML = '<div class="cell orn"><span class="bl">a</span></div>';
+        main.appendChild(d);
+      }
+      main.appendChild(b);
+      if (x.on !== false) prevShown = true;
+    });
+  }
+  function applyFont(slot, val, varName, fallback){
+    let fam = (val || '').trim();
+    if (fam.includes('family=')){
+      try{
+        const u = new URL(fam);
+        fam = (u.searchParams.get('family') || '').split(':')[0].replace(/\+/g, ' ').trim();
+      }catch(e){ fam = ''; }
+    }
+    const linkId = 'gf-' + slot;
+    const old = document.getElementById(linkId);
+    if (!fam){
+      if (old) old.remove();
+      document.documentElement.style.removeProperty(varName);
+      return;
+    }
+    const href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(fam).replace(/%20/g, '+') + '&display=swap';
+    if (!old || old.getAttribute('href') !== href){
+      const l = old || document.createElement('link');
+      l.id = linkId; l.rel = 'stylesheet'; l.href = href;
+      if (!old) document.head.appendChild(l);
+    }
+    document.documentElement.style.setProperty(varName, "'" + fam + "', " + fallback);
+  }
   function applyDesign(d){
     const D = { ...DESIGN_DEF, ...(d || {}) };
     const rs = document.documentElement.style;
@@ -1328,14 +1516,61 @@ const CMS = (() => {
     g('dkHome').style.display = D.dockHome ? '' : 'none';
     g('dkWork').style.display = D.dockWork ? '' : 'none';
     g('dkInter').style.display = D.dockInter ? '' : 'none';
-    g('dkX').style.display = D.dockX ? '' : 'none';
+    // sosmed dock (migrasi dockX lama: false = kosongin)
+    let socials = D.socials;
+    if (!Array.isArray(socials)) socials = (d && d.dockX === false) ? [] : DESIGN_DEF.socials;
+    g('dkSocials').innerHTML = socials.map(sc => {
+      const ic = SOCIAL_ICONS[sc.t];
+      return (ic && sc.url) ? '<a href="' + sc.url + '" target="_blank" rel="noopener" class="mag" title="' + sc.t + '">' + ic + '</a>' : '';
+    }).join('');
+    bindMag(g('dkSocials'));
     const cta = g('dkCta');
     cta.style.display = D.dockCta ? '' : 'none';
     cta.textContent = D.ctaText;
     cta.onclick = () => { if (D.ctaLink) location.href = D.ctaLink; };
+    const aiBtn = g('dkAi');
+    aiBtn.dataset.on = D.dockAi === false ? '0' : '1';
+    aiBtn.style.display = (D.dockAi !== false && window.__aiEnabled) ? '' : 'none';
     g('bblur').style.display = D.blurShow ? '' : 'none';
+    applyFont('body', D.fontBody, '--font-body', "-apple-system,'Segoe UI',sans-serif");
+    applyFont('mono', D.fontMono, '--mono', 'ui-monospace,monospace');
+    applyFont('disp', D.fontDisp, '--font-disp', 'serif');
+    applySections(D.sections);
   }
   applyDesign({}); // wire CTA + defaults sebelum cache/DB ke-apply
+  const designGet = () => {
+    let o = {}; try{ o = JSON.parse(cur('design')) || {}; }catch(e){}
+    const m = { ...DESIGN_DEF, ...o };
+    m.socials = JSON.parse(JSON.stringify(Array.isArray(m.socials) ? m.socials : DESIGN_DEF.socials));
+    m.sections = m.sections ? JSON.parse(JSON.stringify(m.sections)) : null;
+    return m;
+  };
+  const designSet = (k, v) => { const d = designGet(); d[k] = v; set('design', JSON.stringify(d)); };
+  function unmountSecCtrls(){ document.querySelectorAll('.sec-ctl').forEach(el => el.remove()); }
+  function mountSecCtrls(){
+    unmountSecCtrls();
+    document.querySelectorAll('main [data-sec]').forEach(b => {
+      if (b.style.display === 'none') return;
+      const c = document.createElement('div');
+      c.className = 'sec-ctl';
+      c.innerHTML = '<span class="sc-name">' + (SEC_LABELS[b.dataset.sec] || b.dataset.sec) + '</span>' +
+        '<button data-a="up" title="Naik">↑</button><button data-a="down" title="Turun">↓</button><button data-a="hide" title="Sembunyikan">✕</button>';
+      c.addEventListener('click', e => {
+        const act = e.target.dataset.a;
+        if (!act) return;
+        const list = secList(designGet());
+        const i = list.findIndex(x => x.id === b.dataset.sec);
+        if (i < 0) return;
+        if (act === 'up' && i > 0) [list[i-1], list[i]] = [list[i], list[i-1]];
+        if (act === 'down' && i < list.length - 1) [list[i+1], list[i]] = [list[i], list[i+1]];
+        if (act === 'hide') list[i].on = false;
+        designSet('sections', list);
+        mountSecCtrls();
+        if (act !== 'hide') b.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      });
+      b.appendChild(c);
+    });
+  }
 
   /* ---- baca konten default dari DOM (fallback) ---- */
   function readEventsDom(){
@@ -1388,7 +1623,7 @@ const CMS = (() => {
         case 'contactP': g('contactP').innerHTML = v; break;
         case 'events': renderEvents(JSON.parse(v)); break;
         case 'works': WORKS = JSON.parse(v); renderWorks(true); break;
-        case 'posts': POSTS = JSON.parse(v); renderPosts(); if (window.__cmdkReady) buildItems(); routePost(); break;
+        case 'posts': POSTS = JSON.parse(v); renderPosts(); if (window.__cmdkReady) buildItems(); routeAll(false); break;
         case 'stack': STACK = JSON.parse(v); renderStack(); break;
         case 'photos': PHOTOS = JSON.parse(v); renderPhotos(); break;
         case 'resumeUrl': { const a = g('resumeLink'); a.href = v || '#'; a.style.display = v ? '' : 'none'; break; }
@@ -1553,8 +1788,7 @@ const CMS = (() => {
   function buildBody(){
     const b = g('cmsBody'); b.innerHTML = '';
     b.appendChild(sec('Design — jarak, dock, blur', f => {
-      const gd = () => { let o = {}; try{ o = JSON.parse(cur('design')) || {}; }catch(e){} return { ...DESIGN_DEF, ...o }; };
-      const sd = (k, v) => { const d = gd(); d[k] = v; set('design', JSON.stringify(d)); };
+      const gd = designGet, sd = designSet;
       const rng = (label, k, min, max) => {
         f.appendChild(lbl(label));
         const row = document.createElement('div'); row.className = 'cms-row';
@@ -1591,14 +1825,65 @@ const CMS = (() => {
       chk('Icon Home', 'dockHome');
       chk('Icon Work', 'dockWork');
       chk('Icon Interactions', 'dockInter');
-      chk('Icon X / Twitter', 'dockX');
       chk('Tombol CTA', 'dockCta');
+      chk('Tombol AI chat', 'dockAi');
       f.appendChild(lbl('Teks tombol CTA'));
       const t1 = document.createElement('input'); t1.type = 'text'; t1.value = gd().ctaText;
       t1.addEventListener('input', () => sd('ctaText', t1.value)); f.appendChild(t1);
       f.appendChild(lbl('Link tombol CTA'));
       const t2 = document.createElement('input'); t2.type = 'text'; t2.value = gd().ctaLink;
       t2.addEventListener('input', () => sd('ctaLink', t2.value)); f.appendChild(t2);
+      f.appendChild(lbl('Sosmed di dock'));
+      const sbox = document.createElement('div');
+      const sRebuild = () => {
+        sbox.innerHTML = '';
+        const arr = gd().socials;
+        arr.forEach((sc, i) => {
+          const row = document.createElement('div'); row.className = 'cms-row'; row.style.marginBottom = '8px';
+          const sel = document.createElement('select'); sel.style.flex = '0 0 108px';
+          Object.keys(SOCIAL_ICONS).forEach(k2 => { const o = document.createElement('option'); o.value = k2; o.textContent = k2; sel.appendChild(o); });
+          sel.value = sc.t;
+          sel.addEventListener('change', () => { const a = gd().socials; a[i].t = sel.value; sd('socials', a); });
+          const inp = document.createElement('input'); inp.type = 'text'; inp.placeholder = 'https://…'; inp.value = sc.url || '';
+          inp.addEventListener('input', () => { const a = gd().socials; a[i].url = inp.value; sd('socials', a); });
+          const del = document.createElement('button'); del.type = 'button'; del.textContent = '✕';
+          del.style.cssText = 'flex:0 0 34px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;cursor:pointer';
+          del.addEventListener('click', () => { const a = gd().socials; a.splice(i, 1); sd('socials', a); sRebuild(); });
+          row.append(sel, inp, del); sbox.appendChild(row);
+        });
+        const add = document.createElement('button'); add.type = 'button'; add.className = 'cms-add'; add.textContent = '+ Tambah sosmed';
+        add.addEventListener('click', () => { const a = gd().socials; a.push({ t: 'instagram', url: '' }); sd('socials', a); sRebuild(); });
+        sbox.appendChild(add);
+      };
+      sRebuild();
+      f.appendChild(sbox);
+      f.appendChild(lbl('· · ·  FONTS (paste link Google Fonts / nama font)  · · ·'));
+      const fontIn = (label, k2) => {
+        f.appendChild(lbl(label));
+        const i2 = document.createElement('input'); i2.type = 'text'; i2.placeholder = 'kosong = default'; i2.value = gd()[k2] || '';
+        i2.addEventListener('change', () => sd(k2, i2.value));
+        f.appendChild(i2);
+      };
+      fontIn('Font body (default: Inter)', 'fontBody');
+      fontIn('Font mono (default: JetBrains Mono)', 'fontMono');
+      fontIn('Font display / blackletter (default: UnifrakturMaguntia)', 'fontDisp');
+      f.appendChild(lbl('· · ·  SECTIONS (on/off — urutan pakai panah di halaman)  · · ·'));
+      const secBox = document.createElement('div');
+      secList(gd()).forEach(sx => {
+        if (!SEC_LABELS[sx.id]) return;
+        const w = document.createElement('label'); w.className = 'cms-chk';
+        const sp = document.createElement('span'); sp.textContent = SEC_LABELS[sx.id];
+        const c2 = document.createElement('input'); c2.type = 'checkbox'; c2.checked = sx.on !== false;
+        c2.addEventListener('change', () => {
+          const list = secList(designGet());
+          const it = list.find(x => x.id === sx.id);
+          if (it) it.on = c2.checked;
+          designSet('sections', list);
+          if (panel && panel.classList.contains('open')) mountSecCtrls();
+        });
+        w.append(sp, c2); secBox.appendChild(w);
+      });
+      f.appendChild(secBox);
       f.appendChild(lbl('· · ·  BLUR BAWAH LAYAR  · · ·'));
       chk('Tampilkan blur', 'blurShow');
       rng('Ketebalan blur', 'blurPx', 0, 30);
@@ -1776,7 +2061,7 @@ const CMS = (() => {
     loginBox.addEventListener('click', e => { if (e.target === loginBox) loginBox.classList.remove('show'); });
   }
   function openPanel(){
-    buildPanel(); buildBody();
+    buildPanel(); buildBody(); mountSecCtrls();
     requestAnimationFrame(() => panel.classList.add('open'));
     status(Object.keys(draft).length ? 'Unsaved changes' : '');
   }
@@ -1784,7 +2069,7 @@ const CMS = (() => {
     if (!token){ buildLogin(); loginBox.classList.add('show'); setTimeout(() => g('cmsPw').focus(), 60); return; }
     openPanel();
   }
-  function close(){ if (panel) panel.classList.remove('open'); }
+  function close(){ if (panel) panel.classList.remove('open'); unmountSecCtrls(); }
   function save(){
     if (!Object.keys(draft).length){ status('Nothing to save'); return; }
     status('Saving…');
