@@ -735,16 +735,24 @@ function buildClock(str){
     }
   }
 }
+// timezone site: owner = Jakarta; halaman /u/<slug> = timezone si user (dari akunnya)
+let SITE_TZ = 'Asia/Jakarta', SITE_TZ_LBL = '(GMT+7)';
+function tzOffsetLabel(tz){
+  try{
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: tz, timeZoneName: 'shortOffset' }).formatToParts(new Date());
+    const pn = parts.find(x => x.type === 'timeZoneName');
+    return pn ? '(' + pn.value + ')' : '';
+  }catch(e){ return ''; }
+}
 function tick(){
   const d = new Date();
-  // selalu jam Jakarta (GMT+7) — visitor dari negara manapun liat jam yang sama
-  const TZ = { timeZone: 'Asia/Jakarta' };
+  const TZ = { timeZone: SITE_TZ };
   const t = d.toLocaleTimeString('en-GB',{...TZ,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
   if (cols.length !== t.length) buildClock(t);
   [...t].forEach((ch,i)=>{ if (cols[i]) cols[i].style.transform = 'translateY(-' + (+ch * 1.35) + 'em)'; });
   g('dateline').innerHTML =
     d.toLocaleDateString('en-GB',{...TZ,day:'numeric',month:'long',year:'numeric'}) +
-    '<span class="dl-x">, ' + d.toLocaleDateString('en-GB',{...TZ,weekday:'long'}) + ' (GMT+7)</span>';
+    '<span class="dl-x">, ' + d.toLocaleDateString('en-GB',{...TZ,weekday:'long'}) + ' ' + SITE_TZ_LBL + '</span>';
 }
 tick(); setInterval(tick, 1000);
 
@@ -761,7 +769,19 @@ const hio = new IntersectionObserver(es=>es.forEach(e=>{
 document.querySelectorAll('section h2').forEach(h=>{ split(h); hio.observe(h); });
 
 /* ---- text loop role ---- */
-const API_BASE = 'https://api-portfolio.artnesh.cloud';
+const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://127.0.0.1:8787'
+  : 'https://api-portfolio.artnesh.cloud';
+// PU mode: halaman /u/<slug> = portfolio milik user platform (bukan owner)
+const PU = (location.pathname.match(/^\/u\/([a-z0-9][a-z0-9-]*)/) || [])[1] || '';
+const PU_BASE = PU ? '/u/' + PU : '';
+if (PU){
+  // sembunyiin fitur khusus site owner: guestbook + email pribadi
+  const gbSec = g('gbConnect').closest('section');
+  if (gbSec) gbSec.style.display = 'none';
+  const er = document.querySelector('.email-row');
+  if (er) er.style.display = 'none';
+}
 
 let STACK = ['Figma','Photoshop','Illustrator','Procreate','Claude Code','Solidity','CosmWasm','FastAPI','Coolify','After Effects'];
 function renderStack(){
@@ -919,7 +939,7 @@ The tools finally caught up to the ambition. If you can hold design taste and sy
 
 function renderPosts(){
   g('articlesList').innerHTML = POSTS.map(p =>
-    `<a class="arow" href="/post/${p.slug}"><span class="at">${p.t}</span><span class="ad">${p.meta || ''}</span></a>`
+    `<a class="arow" href="${PU_BASE}/post/${p.slug}"><span class="at">${p.t}</span><span class="ad">${p.meta || ''}</span></a>`
   ).join('');
 }
 renderPosts();
@@ -952,13 +972,19 @@ function mdToHtml(md){
 
 /* ---- clean URL router (tanpa hash: /work, /post/slug, dst) ---- */
 const NAV_PATHS = { '/': 'home', '/work': 'work', '/interactions': 'interactions', '/contact': 'contact' };
+const relPath = () => {
+  let p = location.pathname;
+  if (PU_BASE && p.startsWith(PU_BASE)) p = p.slice(PU_BASE.length);
+  return p || '/';
+};
 function navTo(path, scroll = true){
-  if (location.pathname !== path) history.pushState({}, '', path);
+  const full = (PU_BASE + (path === '/' ? '' : path)) || '/';
+  if (location.pathname !== full) history.pushState({}, '', full);
   routeAll(scroll);
 }
 function routeAll(scroll = true){
   const pv = g('postview');
-  const m = location.pathname.match(/^\/post\/(.+)$/);
+  const m = relPath().match(/^\/post\/(.+)$/);
   const post = m && POSTS.find(p => p.slug === decodeURIComponent(m[1]));
   if (post){
     g('pvMeta').textContent = post.meta || '';
@@ -971,7 +997,7 @@ function routeAll(scroll = true){
   }
   pv.classList.remove('show');
   document.body.style.overflow = '';
-  const sec = NAV_PATHS[location.pathname];
+  const sec = NAV_PATHS[relPath()];
   if (scroll && sec){
     if (sec === 'home') scrollTo({ top: 0, behavior: 'smooth' });
     else g(sec) && g(sec).scrollIntoView({ behavior: 'smooth' });
@@ -985,13 +1011,17 @@ if (location.hash){
   const legacy = h.startsWith('post/') ? '/' + h : (NAV_PATHS['/' + h] ? '/' + h : null);
   history.replaceState({}, '', legacy || location.pathname);
 }
-routeAll(location.pathname !== '/');
+routeAll(relPath() !== '/');
 // intercept link internal biar gak full reload
 document.addEventListener('click', e => {
   const a = e.target.closest('a[data-nav], #articlesList a');
   if (!a) return;
   const href = a.getAttribute('href') || '';
-  if (href.startsWith('/')){ e.preventDefault(); navTo(href); }
+  if (href.startsWith('/')){
+    e.preventDefault();
+    const lp = (PU_BASE && href.startsWith(PU_BASE)) ? (href.slice(PU_BASE.length) || '/') : href;
+    navTo(lp);
+  }
 });
 
 let ROLES = ['Graphic Designer','NFT Artist','Vibe Coder','Event Runner'];
@@ -1096,10 +1126,11 @@ function openWork(w, fromEl){
     <div class="act">${mkt ? `<a href="${mkt.u}" target="_blank" rel="noopener">${mkt.l}</a>` : ''}${w.link && !(mkt && mkt.usedLink) ? `<a href="${w.link}" target="_blank" rel="noopener">Visit project</a>` : ''}<button onclick="closeOvl()">Close</button></div>`;
   // track view + tampilkan jumlah views (skip kalau owner)
   const wid = w.id || w.t;
-  if (!localStorage.getItem('cms_token')){
-    fetch(API_BASE + '/track', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ t:'work', ref: wid }) }).catch(()=>{});
+  const isOwnPage = PU ? localStorage.getItem('pu_slug') === PU : !!localStorage.getItem('cms_token');
+  if (!isOwnPage){
+    fetch(API_BASE + '/track', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ t:'work', ref: wid, u: PU }) }).catch(()=>{});
   }
-  fetch(API_BASE + '/views?refs=' + encodeURIComponent(wid)).then(r=>r.ok?r.json():{}).then(v=>{
+  fetch(API_BASE + '/views?refs=' + encodeURIComponent(wid) + (PU ? '&u=' + encodeURIComponent(PU) : '')).then(r=>r.ok?r.json():{}).then(v=>{
     const n = v[wid];
     const cm = sheet.querySelector('.cm');
     if (n && cm) cm.textContent += '  ·  ' + n + ' view' + (n > 1 ? 's' : '');
@@ -1157,9 +1188,11 @@ function buildItems(){
     {t:'Go to Work', c:'Nav', run:()=>{ closeOvl(); navTo('/work'); }},
     {t:'Go to Interactions', c:'Nav', run:()=>{ closeOvl(); navTo('/interactions'); }},
     {t:'Go to Contact', c:'Nav', run:()=>{ closeOvl(); navTo('/contact'); }},
-    {t:'Copy email', c:'Contact', run:()=>{ closeOvl(); copyEmail(); }},
-    {t:'Work with me — email', c:'Contact', run:()=>location.href='mailto:artnesh06@gmail.com'},
-    {t:'X / Twitter — @artnesh', c:'Contact', run:()=>open('https://x.com/artnesh')},
+    ...(PU ? [] : [
+      {t:'Copy email', c:'Contact', run:()=>{ closeOvl(); copyEmail(); }},
+      {t:'Work with me — email', c:'Contact', run:()=>location.href='mailto:artnesh06@gmail.com'},
+      {t:'X / Twitter — @artnesh', c:'Contact', run:()=>open('https://x.com/artnesh')},
+    ]),
     ...(window.__aiEnabled ? [{t:'Ask AI ✦', c:'AI', run:()=>{ openAi(); }}] : []),
     {t:'Edit Mode', c:'Owner', run:()=>{ closeOvl(); CMS.open(); }}
   ];
@@ -1308,7 +1341,7 @@ g('cform').addEventListener('submit', e => {
   const st = g('cfStatus');
   if (msg.length < 2){ st.textContent = 'Write a message first'; return; }
   st.textContent = 'Sending…';
-  fetch(API_BASE + '/contact', {
+  fetch(API_BASE + (PU ? '/u/' + PU + '/contact' : '/contact'), {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: g('cfName').value, email: g('cfEmail').value, message: msg })
   }).then(r => {
@@ -1365,11 +1398,94 @@ g('gbPost').addEventListener('click', async () => {
     });
     if (r.status === 429){ st.textContent = 'One note per day per wallet — come back tomorrow!'; return; }
     if (!r.ok) throw 0;
+    const d = await r.json();
     g('gbMsg').value = '';
     st.textContent = 'Posted ✓';
     loadGuestbook();
+    if (d.has_account && d.slug) st.textContent = 'Posted ✓ — portfolio lo: /u/' + d.slug;
+    else showInvite();
   }catch(e){ st.textContent = 'Cancelled or failed'; }
 });
+
+/* ---- invite popup: bikin portfolio sendiri ---- */
+const INV_AUTH_PREFIX = 'Sign in to artnesh.cloud:\n\n';
+let invBuilt = false;
+function showInvite(){
+  if (!invBuilt){
+    invBuilt = true;
+    const ov = document.createElement('div');
+    ov.className = 'ovl'; ov.id = 'invOvl';
+    ov.innerHTML = `
+      <div class="cbox" style="padding:22px 20px">
+        <div style="font-size:17px;font-weight:600;margin-bottom:4px">\ud83c\udf89 Mau portfolio kayak gini juga?</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:14px">Gratis. Pilih nama, langsung jadi \u2014 lo dapet halaman sendiri di artnesh.cloud/u/&lt;nama&gt; yang bisa lo edit sendiri.</div>
+        <div class="cms-lbl">Nama / slug (jadi alamat portfolio lo)</div>
+        <input type="text" id="invSlug" placeholder="mis: budi-keren" autocomplete="off" style="width:100%;background:rgba(128,128,128,.08);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 13px;font:inherit;font-size:14px;outline:none">
+        <div class="cf-status mono" id="invSlugSt" style="min-height:16px;display:block;margin:4px 0 10px"></div>
+        <button id="invWallet" class="cf-send" style="width:100%">Claim pake wallet ini</button>
+        <div class="cms-lbl" style="text-align:center;margin:8px 0">\u2014 atau pake email \u2014</div>
+        <div id="invEmailBox" style="display:flex;flex-direction:column;gap:8px">
+          <input type="email" id="invEmail" placeholder="Email" style="background:rgba(128,128,128,.08);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 13px;font:inherit;font-size:14px;outline:none">
+          <input type="password" id="invPw" placeholder="Password (min 8 karakter)" style="background:rgba(128,128,128,.08);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 13px;font:inherit;font-size:14px;outline:none">
+          <button id="invEmailGo" class="cf-send">Bikin akun pake email</button>
+        </div>
+        <div class="cf-status mono" id="invSt" style="display:block;margin-top:8px"></div>
+      </div>`;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('show'); });
+    let ckT, ckSeq = 0;
+    g('invSlug').addEventListener('input', () => {
+      clearTimeout(ckT);
+      const v = g('invSlug').value.trim().toLowerCase();
+      if (!v){ g('invSlugSt').textContent = ''; return; }
+      ckT = setTimeout(() => {
+        const seq = ++ckSeq; // anti-race: cuma response terbaru yang dipake
+        fetch(API_BASE + '/users/check?slug=' + encodeURIComponent(v)).then(r => r.json()).then(d => {
+          if (seq !== ckSeq) return;
+          g('invSlugSt').textContent = d.available ? '\u2713 /u/' + v + ' available' : '\u2717 ' + (d.reason || 'taken');
+          g('invSlugSt').style.color = d.available ? '#7dffcf' : '#ff7d9c';
+        }).catch(() => {});
+      }, 350);
+    });
+    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
+    const finish = d => {
+      localStorage.setItem('pu_token', d.token);
+      localStorage.setItem('pu_slug', d.slug);
+      location.href = '/u/' + d.slug + '?welcome=1';
+    };
+    g('invWallet').addEventListener('click', async () => {
+      const slug = g('invSlug').value.trim().toLowerCase();
+      const st2 = g('invSt');
+      if (!slug){ st2.textContent = 'Isi nama dulu'; return; }
+      try{
+        st2.textContent = 'Check wallet buat sign\u2026';
+        const ts = new Date().toISOString();
+        const sig = await ethereum.request({ method: 'personal_sign', params: [INV_AUTH_PREFIX + 'Timestamp: ' + ts, gbAddr] });
+        const r = await fetch(API_BASE + '/users/signup/wallet', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address: gbAddr, slug, timestamp: ts, signature: sig, timezone: tz })
+        });
+        const d = await r.json();
+        if (!r.ok){ st2.textContent = d.detail || 'Gagal'; return; }
+        finish(d);
+      }catch(e){ st2.textContent = 'Dibatalin'; }
+    });
+    g('invEmailGo').addEventListener('click', () => {
+      const slug = g('invSlug').value.trim().toLowerCase();
+      const st2 = g('invSt');
+      if (!slug){ st2.textContent = 'Isi nama dulu'; return; }
+      fetch(API_BASE + '/users/signup/email', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: g('invEmail').value, password: g('invPw').value, slug, timezone: tz })
+      }).then(async r => {
+        const d = await r.json();
+        if (!r.ok){ st2.textContent = d.detail || 'Gagal'; return; }
+        finish(d);
+      }).catch(() => { g('invSt').textContent = 'Error \u2014 coba lagi'; });
+    });
+  }
+  g('invOvl').classList.add('show');
+}
 
 /* ---- AI assistant ---- */
 const aiOvl = g('aiOvl'), aiMsgs = g('aiMsgs'), aiIn = g('aiIn');
@@ -1415,8 +1531,8 @@ g('aiSend').addEventListener('click', aiSend);
 aiIn.addEventListener('keydown', e => { if (e.key === 'Enter') aiSend(); });
 g('dkAi').addEventListener('click', openAi);
 aiOvl.addEventListener('click', e => { if (e.target === aiOvl) aiOvl.classList.remove('show'); });
-// tampilkan tombol AI kalau backend punya key + design gak matiin
-fetch(API_BASE + '/ai').then(r => r.ok ? r.json() : { enabled: false }).then(d => {
+// tampilkan tombol AI kalau backend punya key + design gak matiin (owner site only)
+if (!PU) fetch(API_BASE + '/ai').then(r => r.ok ? r.json() : { enabled: false }).then(d => {
   if (d.enabled){
     window.__aiEnabled = true;
     const b = g('dkAi');
@@ -1426,11 +1542,12 @@ fetch(API_BASE + '/ai').then(r => r.ok ? r.json() : { enabled: false }).then(d =
 }).catch(() => {});
 
 /* ---- pageview tracking (skip owner + sekali per sesi) ---- */
-if (!localStorage.getItem('cms_token') && !sessionStorage.getItem('pv')){
+const _isOwnView = PU ? localStorage.getItem('pu_slug') === PU : !!localStorage.getItem('cms_token');
+if (!_isOwnView && !sessionStorage.getItem('pv')){
   sessionStorage.setItem('pv', '1');
   fetch(API_BASE + '/track', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ t: 'page', ref: location.pathname })
+    body: JSON.stringify({ t: 'page', ref: location.pathname, u: PU })
   }).catch(() => {});
 }
 
@@ -1438,6 +1555,9 @@ if (!localStorage.getItem('cms_token') && !sessionStorage.getItem('pv')){
 const CMS = (() => {
   const API = API_BASE;
   let token = localStorage.getItem('cms_token') || '';
+  let puToken = localStorage.getItem('pu_token') || '';
+  const puOwn = () => PU && puToken && localStorage.getItem('pu_slug') === PU;
+  const CACHE_KEY = PU ? 'cms_cache_u_' + PU : 'cms_cache';
   let saved = {};   // content dari server
   let draft = {};   // perubahan yang belum di-save
   const norm = s => (s || '').replace(/ /g, ' ');
@@ -1634,16 +1754,43 @@ const CMS = (() => {
   const cur = k => (k in draft) ? draft[k] : (k in saved) ? saved[k] : DEF[k];
   function set(k, v){ draft[k] = v; applyKey(k, v); status('Unsaved changes'); }
 
+  if (PU){
+    // starter template buat portfolio user baru — jangan tampilin konten owner
+    const puName = PU.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const puAv = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><rect width="240" height="240" fill="#1c1c24"/><text x="50%" y="55%" font-family="Georgia,serif" font-size="110" fill="#7dffcf" text-anchor="middle" dominant-baseline="middle">' + (puName[0] || '?').toUpperCase() + '</text></svg>');
+    Object.assign(DEF, {
+      'pfp': puAv, 'hero.name': puName, 'roles': '["Creative"]', 'hero.pill': 'Open for work',
+      'me10h': 'In 10 seconds', 'me10p': 'Hey! I\u2019m ' + puName + '. This portfolio is fresh out of the oven \ud83c\udf5e \u2014 more coming soon.',
+      'bgh': 'Background', 'bgp': 'Open Edit Mode (\u2318K \u2192 Edit Mode) to tell your story here.',
+      'careerP1': 'Write about your journey here.', 'careerP2': '', 'careerP3': '',
+      'resumeUrl': '', 'posts': '[]', 'stack': '[]', 'photos': '[]',
+      'contactP': 'Want to reach out? Drop a message \u2014 it lands straight in my inbox.',
+      'secDigitalP': '', 'secNftP': '', 'secCodeP': '', 'works': '[]', 'events': '[]',
+      'interP': '', 'interCapT': '', 'interCapP': '',
+      'design': JSON.stringify({ ...DESIGN_DEF, socials: [], ctaText: 'Contact me', ctaLink: PU_BASE + '/contact' })
+    });
+    Object.entries(DEF).forEach(([k, v]) => applyKey(k, v));
+    document.title = puName + ' \u2014 portfolio';
+  }
+
   /* ---- apply cache dulu (instant, tanpa kedip), lalu sync dari API ---- */
   try{
-    saved = JSON.parse(localStorage.getItem('cms_cache') || '{}') || {};
+    saved = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}') || {};
     Object.entries(saved).forEach(([k, v]) => applyKey(k, v));
   }catch(e){ saved = {}; }
-  fetch(API + '/content').then(r => r.ok ? r.json() : {}).then(d => {
+  fetch(API + (PU ? '/u/' + PU + '/content' : '/content')).then(r => {
+    if (PU && r.status === 404){
+      document.body.innerHTML = '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:var(--mono)"><div style="font-size:40px">404</div><div>Portfolio /u/' + PU + ' gak ketemu</div><a href="/" style="color:#7dffcf">\u2190 balik ke artnesh.cloud</a></div>';
+      throw 0;
+    }
+    return r.ok ? r.json() : {};
+  }).then(d => {
     const fresh = d || {};
     Object.entries(fresh).forEach(([k, v]) => { if (saved[k] !== v) applyKey(k, v); });
     saved = fresh;
-    try{ localStorage.setItem('cms_cache', JSON.stringify(fresh)); }catch(e){}
+    if (PU && fresh.__tz){ SITE_TZ = fresh.__tz; SITE_TZ_LBL = tzOffsetLabel(SITE_TZ); tick(); }
+    try{ localStorage.setItem(CACHE_KEY, JSON.stringify(fresh)); }catch(e){}
   }).catch(() => {});
 
   /* ---- image helper: file → resized data URI ---- */
@@ -1958,7 +2105,7 @@ const CMS = (() => {
       const box = document.createElement('div');
       box.innerHTML = '<div class="cms-lbl">memuat…</div>';
       f.appendChild(box);
-      fetch(API + '/contact', { headers: { 'Authorization': 'Bearer ' + token } })
+      fetch(API + (PU ? '/users/me/contact' : '/contact'), { headers: { 'Authorization': 'Bearer ' + (PU ? puToken : token) } })
         .then(r => r.ok ? r.json() : Promise.reject())
         .then(list => {
           if (!list.length){ box.innerHTML = '<div class="cms-lbl">belum ada pesan masuk</div>'; return; }
@@ -1979,7 +2126,46 @@ const CMS = (() => {
         })
         .catch(() => { box.innerHTML = '<div class="cms-lbl">gagal memuat — backend perlu redeploy?</div>'; });
     }));
-    b.appendChild(sec('Stats (views)', f => {
+    if (!PU) b.appendChild(sec('Users (platform)', f => {
+      const box = document.createElement('div');
+      box.innerHTML = '<div class="cms-lbl">memuat\u2026</div>';
+      f.appendChild(box);
+      const load = () => fetch(API + '/admin/users', { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(list => {
+          if (!list.length){ box.innerHTML = '<div class="cms-lbl">belum ada user daftar</div>'; return; }
+          box.innerHTML = '';
+          list.forEach(u => {
+            const d = document.createElement('div');
+            d.className = 'cms-item';
+            const head = document.createElement('div');
+            head.className = 'cms-lbl'; head.style.marginTop = '0';
+            head.textContent = '@' + u.slug + ' \u00b7 ' + (u.email || (u.wallet_address || '').slice(0, 10) + '\u2026') + ' \u00b7 ' + u.created_at.slice(0, 10);
+            const meta = document.createElement('div');
+            meta.style.cssText = 'font-size:12px;color:var(--muted);font-family:var(--mono)';
+            meta.textContent = u.timezone + ' \u00b7 ' + u.content_keys + ' keys \u00b7 ' + u.inbox_count + ' pesan';
+            const row = document.createElement('div');
+            row.className = 'cms-row'; row.style.marginTop = '8px';
+            const openB = document.createElement('a');
+            openB.href = '/u/' + u.slug; openB.target = '_blank';
+            openB.textContent = 'Buka'; openB.style.cssText = 'flex:1;text-align:center;border:1px solid var(--line);border-radius:8px;padding:6px;color:var(--text);text-decoration:none;font-size:12px';
+            const delB = document.createElement('button');
+            delB.className = 'cms-del'; delB.style.position = 'static'; delB.style.flex = '0 0 auto';
+            delB.textContent = 'hapus';
+            delB.addEventListener('click', () => {
+              if (!confirm('Hapus akun @' + u.slug + ' beserta semua kontennya? Gak bisa dibalikin.')) return;
+              fetch(API + '/admin/users/' + u.id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } })
+                .then(r => r.ok ? load() : alert('Gagal hapus'));
+            });
+            row.append(openB, delB);
+            d.append(head, meta, row);
+            box.appendChild(d);
+          });
+        })
+        .catch(() => { box.innerHTML = '<div class="cms-lbl">gagal memuat \u2014 backend perlu redeploy?</div>'; });
+      load();
+    }));
+    if (!PU) b.appendChild(sec('Stats (views)', f => {
       const box = document.createElement('div');
       box.innerHTML = '<div class="cms-lbl">memuat…</div>';
       f.appendChild(box);
@@ -1996,6 +2182,7 @@ const CMS = (() => {
           mk('Total pageviews', s.page_total);
           mk('Guestbook notes', s.guestbook_total);
           mk('Pesan contact', s.contact_total);
+          if (s.users_total !== undefined) mk('Users terdaftar', s.users_total);
           if (s.per_work.length){
             const h = document.createElement('div'); h.className = 'cms-lbl'; h.textContent = 'Views per project';
             box.appendChild(h);
@@ -2029,7 +2216,9 @@ const CMS = (() => {
     g('cmsSave').addEventListener('click', save);
     g('cmsDiscard').addEventListener('click', discard);
     g('cmsLogout').addEventListener('click', () => {
-      token = ''; localStorage.removeItem('cms_token'); close();
+      if (PU){ puToken = ''; localStorage.removeItem('pu_token'); localStorage.removeItem('pu_slug'); }
+      else { token = ''; localStorage.removeItem('cms_token'); }
+      close();
     });
   }
   function buildLogin(){
@@ -2065,7 +2254,64 @@ const CMS = (() => {
     requestAnimationFrame(() => panel.classList.add('open'));
     status(Object.keys(draft).length ? 'Unsaved changes' : '');
   }
+  const PU_AUTH_PREFIX = 'Sign in to artnesh.cloud:\n\n';
+  let puLoginBox;
+  function buildLoginPU(){
+    if (puLoginBox) return;
+    puLoginBox = document.createElement('div');
+    puLoginBox.id = 'cmsLogin';
+    puLoginBox.innerHTML = `
+      <div class="cms-login">
+        <h3>Login \u2014 @${PU}</h3>
+        <button id="puWalletGo" style="width:100%;margin-bottom:10px">\ud83e\udd8a Login pake wallet</button>
+        <div class="cms-lbl" style="text-align:center">\u2014 atau email \u2014</div>
+        <input type="email" id="puEmail" placeholder="Email" autocomplete="email">
+        <input type="password" id="puPw" placeholder="Password" autocomplete="current-password">
+        <div class="err" id="puErr"></div>
+        <button id="puEmailGo">Masuk</button>
+      </div>`;
+    document.body.appendChild(puLoginBox);
+    const done = d => {
+      puToken = d.token;
+      localStorage.setItem('pu_token', d.token);
+      localStorage.setItem('pu_slug', d.slug);
+      if (d.slug === PU){ puLoginBox.classList.remove('show'); openPanel(); }
+      else location.href = '/u/' + d.slug;
+    };
+    const err = t => { g('puErr').textContent = t; };
+    g('puWalletGo').addEventListener('click', async () => {
+      err('');
+      if (!window.ethereum){ err('No wallet found \u2014 install MetaMask'); return; }
+      try{
+        const acc = await ethereum.request({ method: 'eth_requestAccounts' });
+        const ts = new Date().toISOString();
+        const sig = await ethereum.request({ method: 'personal_sign', params: [PU_AUTH_PREFIX + 'Timestamp: ' + ts, acc[0]] });
+        const r = await fetch(API + '/users/login/wallet', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address: acc[0], timestamp: ts, signature: sig })
+        });
+        if (r.status === 404){ err('Wallet ini belum punya akun \u2014 isi guestbook di artnesh.cloud dulu'); return; }
+        if (!r.ok) throw 0;
+        done(await r.json());
+      }catch(e){ err('Gagal / dibatalin'); }
+    });
+    const goEmail = () => {
+      err('');
+      fetch(API + '/users/login/email', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: g('puEmail').value, password: g('puPw').value })
+      }).then(r => { if (!r.ok) throw 0; return r.json(); }).then(done)
+        .catch(() => err('Email / password salah'));
+    };
+    g('puEmailGo').addEventListener('click', goEmail);
+    g('puPw').addEventListener('keydown', e => { if (e.key === 'Enter') goEmail(); });
+    puLoginBox.addEventListener('click', e => { if (e.target === puLoginBox) puLoginBox.classList.remove('show'); });
+  }
   function open(){
+    if (PU){
+      if (!puOwn()){ buildLoginPU(); puLoginBox.classList.add('show'); return; }
+      openPanel(); return;
+    }
     if (!token){ buildLogin(); loginBox.classList.add('show'); setTimeout(() => g('cmsPw').focus(), 60); return; }
     openPanel();
   }
@@ -2073,17 +2319,21 @@ const CMS = (() => {
   function save(){
     if (!Object.keys(draft).length){ status('Nothing to save'); return; }
     status('Saving…');
-    fetch(API + '/content', {
+    fetch(API + (PU ? '/users/me/content' : '/content'), {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (PU ? puToken : token) },
       body: JSON.stringify({ items: draft })
     }).then(r => {
-      if (r.status === 401){ token = ''; localStorage.removeItem('cms_token'); buildLogin(); loginBox.classList.add('show'); throw 0; }
+      if (r.status === 401){
+        if (PU){ puToken = ''; localStorage.removeItem('pu_token'); buildLoginPU(); puLoginBox.classList.add('show'); }
+        else { token = ''; localStorage.removeItem('cms_token'); buildLogin(); loginBox.classList.add('show'); }
+        throw 0;
+      }
       if (!r.ok) throw 0;
       return r.json();
     }).then(() => {
       Object.assign(saved, draft); draft = {};
-      try{ localStorage.setItem('cms_cache', JSON.stringify(saved)); }catch(e){}
+      try{ localStorage.setItem(CACHE_KEY, JSON.stringify(saved)); }catch(e){}
       status('Saved ✓'); setTimeout(() => status(''), 2500);
     }).catch(() => status('Save gagal — cek koneksi'));
   }
@@ -2095,6 +2345,11 @@ const CMS = (() => {
   }
   return { open };
 })();
+// abis signup → langsung buka edit mode biar user bisa mulai ngisi
+if (PU && new URLSearchParams(location.search).has('welcome')){
+  history.replaceState({}, '', PU_BASE);
+  setTimeout(() => CMS.open(), 500);
+}
 </script>
 
 </body>
